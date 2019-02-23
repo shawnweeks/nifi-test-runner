@@ -1,4 +1,6 @@
+import org.apache.nifi.flowfile.FlowFile
 import org.apache.nifi.logging.ComponentLog
+import org.apache.nifi.processors.groovyx.flow.SessionFile
 
 import java.lang.reflect.Array;
 import org.apache.avro.Schema
@@ -16,6 +18,8 @@ import uk.ac.bristol.star.cdf.VariableAttribute
 import uk.ac.bristol.star.cdf.record.SimpleNioBuf
 
 import java.nio.ByteBuffer
+
+long flowStartTime = System.nanoTime()
 
 Schema cdfVarAttSchema = SchemaBuilder
         .record("cdfVarAtt")
@@ -51,7 +55,7 @@ Schema cdfVarRecSchema = SchemaBuilder
         .name("record_array").type().array().items().stringType().noDefault()
         .endRecord()
 
-def flowFile = session.get()
+SessionFile flowFile = session.get()
 
 if (!flowFile) return
 
@@ -71,10 +75,10 @@ try {
     log.error(e)
     REL_FAILURE << flowFile
 }
-double cdfReadTime = (System.nanoTime() - startTime)/1000.00/1000.00/1000.00
+double cdfReadTime = (System.nanoTime() - startTime) / 1000.00 / 1000.00 / 1000.00
 
 
-def cdfRecFlowFile = session.create(flowFile)
+SessionFile cdfRecFlowFile = session.create(flowFile)
 
 cdfRecFlowFile."cdf_read_time" = cdfReadTime
 cdfRecFlowFile."cdf_extract_type" = "cdfRecFlowFile"
@@ -84,34 +88,30 @@ DataFileWriter<Record> writer = new DataFileWriter<>(new GenericDatumWriter())
 //writer.setCodec(CodecFactory.deflateCodec(1))
 
 startTime = System.nanoTime()
-cdfRecFlowFile.write { outputStream ->
-    DataFileWriter<Record> w = writer.create cdfVarRecSchema, (outputStream as OutputStream)
 
-    Variable[] vars = cdfContent.getVariables()
-    for (Variable var : vars) {
+cdfRecFlowFile.write { OutputStream outputStream ->
+    DataFileWriter<Record> w = writer.create cdfVarRecSchema, outputStream
+
+    cdfContent.getVariables().each { var ->
         for (int i = 0; i < var.getRecordCount(); i++) {
             Record r = new Record(cdfVarRecSchema)
             Object tmpArray = var.createRawValueArray()
             var.readRawRecord i, tmpArray
-//            Object record = var.readShapedRecord(i, true, tmpArray)
 
-            r.put("file_id", flowFile.getAttribute("uuid"))
-            r.put("variable_name", var.getName())
-            r.put("variable_type", var.getDataType().getName())
-            r.put("record_number", i + 1)
+            r.put "file_id", flowFile.getAttribute("uuid")
+            r.put "variable_name", var.getName()
+            r.put "variable_type", var.getDataType().getName()
+            r.put "record_number", i + 1
 
             List<String> recordArray
             if (tmpArray.getClass().isArray()) {
-                int arraySize = tmpArray.length
+                int arraySize = Array.getLength tmpArray
                 r.put("record_count", arraySize)
 
                 recordArray = new ArrayList<>(arraySize)
-                for (int x = 0; i < Array.getLength(tmpArray); i++) {
+                for (int x = 0; i < arraySize; i++) {
                     recordArray.add Array.get(tmpArray, x).toString()
                 }
-//                record.each {
-//                    recordArray.add "${it}"
-//                }
             } else {
                 r.put("record_count", 1)
                 recordArray = new ArrayList<>(1)
@@ -124,8 +124,9 @@ cdfRecFlowFile.write { outputStream ->
     w.close()
 }
 
-double cdfWriteTime = (System.nanoTime() - startTime)/1000.00/1000.00/1000.00
+double cdfWriteTime = (System.nanoTime() - startTime) / 1000.00 / 1000.00 / 1000.00
 cdfRecFlowFile."cdf_write_time" = cdfWriteTime
+cdfRecFlowFile."cdf_total_time" = (System.nanoTime() - flowStartTime) / 1000.00 / 1000.00 / 1000.00
 
 REL_SUCCESS << cdfRecFlowFile
 
