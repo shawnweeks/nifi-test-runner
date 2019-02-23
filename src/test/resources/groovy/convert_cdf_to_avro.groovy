@@ -28,30 +28,31 @@ Schema cdfVarAttSchema = SchemaBuilder
         .name("attribute_value").type().stringType().noDefault()
         .endRecord()
 
-Schema cdfVarSchema = SchemaBuilder
-        .record("cdfVar")
-        .fields()
-        .name("file_id").type().stringType().noDefault()
-        .name("variable_name").type().stringType().noDefault()
-        .name("variable_type").type().stringType().noDefault()
-//                .name("num_elements").type().intType().noDefault()
-//                .name("dim").type().intType().noDefault()
-//                .name("dim_sizes").type().array().items().intType().noDefault()
-//                .name("dim_variances").type().array().items().booleanType().noDefault()
-//                .name("rec_variance").type().intType().noDefault()
-//                .name("max_records").type().intType().noDefault()
-        .name("attributes").type().map().values(cdfVarAttSchema).noDefault()
-        .endRecord()
+//Schema cdfVarSchema = SchemaBuilder
+//        .record("cdfVar")
+//        .fields()
+//        .name("file_id").type().stringType().noDefault()
+//        .name("variable_name").type().stringType().noDefault()
+//        .name("variable_type").type().stringType().noDefault()
+//        .name("num_elements").type().intType().noDefault()
+//        .name("dim").type().intType().noDefault()
+//        .name("dim_sizes").type().array().items().intType().noDefault()
+//        .name("dim_variances").type().array().items().booleanType().noDefault()
+//        .name("rec_variance").type().intType().noDefault()
+//        .name("max_records").type().intType().noDefault()
+//        .name("attributes").type().map().values(cdfVarAttSchema).noDefault()
+//        .endRecord()
 
 
 Schema cdfVarRecSchema = SchemaBuilder
-        .record("cdfVarRec")
+        .record("record")
         .fields()
         .name("file_id").type().stringType().noDefault()
         .name("variable_name").type().stringType().noDefault()
         .name("variable_type").type().stringType().noDefault()
+        .name("variable_attributes").type().map().values(cdfVarAttSchema).noDefault()
         .name("record_number").type().intType().noDefault()
-        .name("record_count").type().intType().noDefault()
+        .name("record_size").type().intType().noDefault()
         .name("record_array").type().array().items().stringType().noDefault()
         .endRecord()
 
@@ -64,10 +65,10 @@ long startTime
 CdfContent cdfContent
 startTime = System.nanoTime()
 try {
-    flowFile.read { inputStream ->
+    flowFile.read { InputStream inputStream ->
 
         // Setup CDF Reader
-        ByteBuffer byteBuffer = ByteBuffer.wrap((inputStream as InputStream).getBytes())
+        ByteBuffer byteBuffer = ByteBuffer.wrap inputStream.getBytes()
         inputStream.close()
         cdfContent = new CdfContent(new CdfReader(new SimpleNioBuf(byteBuffer, true, false)))
     }
@@ -78,7 +79,7 @@ try {
 double cdfReadTime = (System.nanoTime() - startTime) / 1000.00 / 1000.00 / 1000.00
 
 
-SessionFile cdfRecFlowFile = session.create(flowFile)
+SessionFile cdfRecFlowFile = session.create flowFile
 
 cdfRecFlowFile."cdf_read_time" = cdfReadTime
 cdfRecFlowFile."cdf_extract_type" = "cdfRecFlowFile"
@@ -93,27 +94,43 @@ cdfRecFlowFile.write { OutputStream outputStream ->
     DataFileWriter<Record> w = writer.create cdfVarRecSchema, outputStream
 
     cdfContent.getVariables().each { var ->
+        String uuid = flowFile.getAttribute("uuid")
+        String variableName = var.getName()
+        String variableType = var.getDataType().getName()
+
+        Map<String, Record> variableAttributes = new HashMap<>()
+        cdfContent.variableAttributes.each { VariableAttribute variableAttribute ->
+            AttributeEntry attributeEntry = variableAttribute.getEntry var
+            if (attributeEntry != null) {
+                Record r = new Record(cdfVarAttSchema)
+                r.put "attribute_type", attributeEntry.dataType.getName()
+                r.put "attribute_value", attributeEntry.toString()
+                variableAttributes.put variableAttribute.getName(), r
+            }
+        }
+
         for (int i = 0; i < var.getRecordCount(); i++) {
             Record r = new Record(cdfVarRecSchema)
             Object tmpArray = var.createRawValueArray()
             var.readRawRecord i, tmpArray
 
-            r.put "file_id", flowFile.getAttribute("uuid")
-            r.put "variable_name", var.getName()
-            r.put "variable_type", var.getDataType().getName()
+            r.put "file_id", uuid
+            r.put "variable_name", variableName
+            r.put "variable_type", variableType
+            r.put "variable_attributes", variableAttributes
             r.put "record_number", i + 1
 
-            List<String> recordArray
+            List<Object> recordArray
             if (tmpArray.getClass().isArray()) {
                 int arraySize = Array.getLength tmpArray
-                r.put("record_count", arraySize)
+                r.put("record_size", arraySize)
 
                 recordArray = new ArrayList<>(arraySize)
                 for (int x = 0; i < arraySize; i++) {
                     recordArray.add Array.get(tmpArray, x).toString()
                 }
             } else {
-                r.put("record_count", 1)
+                r.put("record_size", 1)
                 recordArray = new ArrayList<>(1)
                 recordArray.add tmpArray.toString()
             }

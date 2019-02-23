@@ -26,6 +26,7 @@ import org.apache.nifi.util.MockProcessContext;
 import org.apache.nifi.util.MockProcessorInitializationContext;
 import org.apache.nifi.util.TestRunner;
 import org.apache.nifi.util.TestRunners;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -82,10 +83,14 @@ public class TestConvertCDFToAVRO {
             });
             DatumReader<GenericRecord> datumReader = new GenericDatumReader<>();
             DataFileReader<GenericRecord> dataFileReader = new DataFileReader<>(new SeekableByteArrayInput(flowFile.toByteArray()), datumReader);
-//            System.out.println(dataFileReader.getSchema());
+            System.out.println(dataFileReader.getSchema().toString(true));
 //            System.out.println(new String(dataFileReader.getMeta("avro.codec")));
             for (GenericRecord r : dataFileReader) {
-                System.out.println(r.toString());
+//                System.out.println(r.toString());
+                ObjectMapper mapper = new ObjectMapper();
+                Object jsonObject = mapper.readValue(r.toString(), Object.class);
+                String prettyJson = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonObject);
+                System.out.println(prettyJson);
             }
         }
     }
