@@ -57,7 +57,6 @@ public class TestConvertCDFToAVRO {
 
     @Test
     public void testProcessor() throws IOException {
-        System.out.println("Testing...");
         String groovyScript = new String(Files.readAllBytes(Paths.get("src/test/resources/groovy/convert_cdf_to_avro.groovy")), "UTF-8");
         runner.setProperty(proc.SCRIPT_BODY, groovyScript);
         try (Stream<Path> paths = Files.walk(Paths.get("E:\\LOGSA\\cdf_sample2"))) {
@@ -77,13 +76,17 @@ public class TestConvertCDFToAVRO {
 
         for (MockFlowFile flowFile : result) {
             System.out.println(flowFile.toString());
-            DatumReader<GenericRecord> datumReader = new GenericDatumReader<>();
-            DataFileReader<GenericRecord> dataFileReader = new DataFileReader<>(new SeekableByteArrayInput(flowFile.toByteArray()), datumReader);
-//            System.out.println(dataFileReader.getSchema());
-//            System.out.println(new String(dataFileReader.getMeta("avro.codec")));
-            for (GenericRecord r : dataFileReader) {
-                System.out.println(r.toString());
-            }
+
+            flowFile.getAttributes().forEach((k, v) -> {
+                System.out.println(k + ":" + v);
+            });
+//            DatumReader<GenericRecord> datumReader = new GenericDatumReader<>();
+//            DataFileReader<GenericRecord> dataFileReader = new DataFileReader<>(new SeekableByteArrayInput(flowFile.toByteArray()), datumReader);
+////            System.out.println(dataFileReader.getSchema());
+////            System.out.println(new String(dataFileReader.getMeta("avro.codec")));
+//            for (GenericRecord r : dataFileReader) {
+//                System.out.println(r.toString());
+//            }
         }
     }
 
