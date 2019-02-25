@@ -1,5 +1,6 @@
 import org.apache.nifi.flowfile.FlowFile
 import org.apache.nifi.logging.ComponentLog
+import org.apache.nifi.processor.exception.ProcessException
 import org.apache.nifi.processors.groovyx.flow.SessionFile
 
 import java.lang.reflect.Array;
@@ -64,16 +65,19 @@ long startTime
 
 CdfContent cdfContent
 startTime = System.nanoTime()
-try {
-    flowFile.read { InputStream inputStream ->
 
-        // Setup CDF Reader
-        ByteBuffer byteBuffer = ByteBuffer.wrap inputStream.getBytes()
-        inputStream.close()
-        cdfContent = new CdfContent(new CdfReader(new SimpleNioBuf(byteBuffer, true, false)))
-    }
+// Populate ByteBuffer from incoming FlowFile.
+ByteBuffer byteBuffer
+flowFile.read { InputStream inputStream ->
+    byteBuffer = ByteBuffer.wrap inputStream.bytes
+    inputStream.close()
+}
+
+// Setup CDF Reader
+try {
+    cdfContent = new CdfContent(new CdfReader(new SimpleNioBuf(byteBuffer, true, false)))
 } catch (IOException e) {
-    log.error(e)
+    log.error("Failed to read CDF File", e)
     REL_FAILURE << flowFile
     return // No reason to continue if we can't read CDF File.
 }
@@ -96,22 +100,22 @@ cdfRecFlowFile.write { OutputStream outputStream ->
     DataFileWriter<Record> w = writer.create cdfVarRecSchema, outputStream
 
     cdfContent.getVariables().each { var ->
-        String uuid = flowFile.getAttribute("uuid")
-        String variableName = var.getName()
-        String variableType = var.getDataType().getName()
+        String uuid = flowFile."uuid"
+        String variableName = var.name
+        String variableType = var.dataType.name
 
         Map<String, Record> variableAttributes = new HashMap<>()
         cdfContent.variableAttributes.each { VariableAttribute variableAttribute ->
             AttributeEntry attributeEntry = variableAttribute.getEntry var
             if (attributeEntry != null) {
                 Record r = new Record(cdfVarAttSchema)
-                r.put "attribute_type", attributeEntry.dataType.getName()
+                r.put "attribute_type", attributeEntry.dataType.name
                 r.put "attribute_value", attributeEntry.toString()
-                variableAttributes.put variableAttribute.getName(), r
+                variableAttributes.put variableAttribute.name, r
             }
         }
 
-        for (int i = 0; i < var.getRecordCount(); i++) {
+        for (int i = 0; i < var.recordCount; i++) {
             Record r = new Record(cdfVarRecSchema)
             Object tmpArray = var.createRawValueArray()
             var.readRawRecord i, tmpArray
@@ -136,8 +140,8 @@ cdfRecFlowFile.write { OutputStream outputStream ->
                 recordArray = new ArrayList<>(1)
                 recordArray.add tmpArray.toString()
             }
-            r.put("record_array", recordArray)
-            w.append(r)
+            r.put "record_array", recordArray
+            w.append r
         }
     }
     w.close()
