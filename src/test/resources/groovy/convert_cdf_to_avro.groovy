@@ -59,6 +59,8 @@ Schema cdfVarRecSchema = SchemaBuilder
 
 SessionFile flowFile = session.get()
 
+flowFile.session
+
 if (!flowFile) return
 
 long startTime
@@ -77,7 +79,7 @@ flowFile.read { InputStream inputStream ->
 try {
     cdfContent = new CdfContent(new CdfReader(new SimpleNioBuf(byteBuffer, true, false)))
 } catch (IOException e) {
-    log.error("Failed to read CDF File", e)
+    log.error "Failed to read CDF File", e
     REL_FAILURE << flowFile
     return // No reason to continue if we can't read CDF File.
 }
@@ -92,14 +94,14 @@ cdfRecFlowFile."cdf_extract_type" = "cdfRecFlowFile"
 cdfRecFlowFile."mime.type" = "application/avro-binary"
 
 DataFileWriter<Record> writer = new DataFileWriter<>(new GenericDatumWriter())
-//writer.setCodec(CodecFactory.deflateCodec(1))
+writer.setCodec CodecFactory.deflateCodec(5)
 
 startTime = System.nanoTime()
 
 cdfRecFlowFile.write { OutputStream outputStream ->
     DataFileWriter<Record> w = writer.create cdfVarRecSchema, outputStream
 
-    cdfContent.getVariables().each { var ->
+    cdfContent.getVariables().each { Variable var ->
         String uuid = flowFile."uuid"
         String variableName = var.name
         String variableType = var.dataType.name
@@ -129,14 +131,14 @@ cdfRecFlowFile.write { OutputStream outputStream ->
             List<Object> recordArray
             if (tmpArray.getClass().isArray()) {
                 int arraySize = Array.getLength tmpArray
-                r.put("record_size", arraySize)
+                r.put "record_size", arraySize
 
                 recordArray = new ArrayList<>(arraySize)
                 for (int x = 0; x < arraySize; x++) {
                     recordArray.add Array.get(tmpArray, x).toString()
                 }
             } else {
-                r.put("record_size", 1)
+                r.put "record_size", 1
                 recordArray = new ArrayList<>(1)
                 recordArray.add tmpArray.toString()
             }
@@ -153,4 +155,4 @@ cdfRecFlowFile."cdf_total_time" = (System.nanoTime() - flowStartTime) / 1000.00 
 
 REL_SUCCESS << cdfRecFlowFile
 
-session.remove(flowFile)
+session.remove flowFile
