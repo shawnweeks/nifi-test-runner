@@ -75,7 +75,9 @@ try {
 } catch (IOException e) {
     log.error(e)
     REL_FAILURE << flowFile
+    return // No reason to continue if we can't read CDF File.
 }
+
 double cdfReadTime = (System.nanoTime() - startTime) / 1000.00 / 1000.00 / 1000.00
 
 
@@ -126,7 +128,7 @@ cdfRecFlowFile.write { OutputStream outputStream ->
                 r.put("record_size", arraySize)
 
                 recordArray = new ArrayList<>(arraySize)
-                for (int x = 0; i < arraySize; i++) {
+                for (int x = 0; x < arraySize; x++) {
                     recordArray.add Array.get(tmpArray, x).toString()
                 }
             } else {
