@@ -22,7 +22,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
+//import java.util.TreeMap;
 import java.util.stream.Stream;
 
 public class TestConvertCDFToAVRO {
@@ -72,9 +72,9 @@ public class TestConvertCDFToAVRO {
 		for (MockFlowFile flowFile : result) {
 			System.out.println(flowFile.toString());
 
-			new TreeMap<>(flowFile.getAttributes()).forEach((k, v) -> {
-				System.out.println(k + ":" + v);
-			});
+//			new TreeMap<>(flowFile.getAttributes()).forEach((k, v) -> {
+//				System.out.println(k + ":" + v);
+//			});
 			DatumReader<GenericRecord> datumReader = new GenericDatumReader<>();
 			try (DataFileReader<GenericRecord> dataFileReader = new DataFileReader<>(
 					new SeekableByteArrayInput(flowFile.toByteArray()), datumReader)) {

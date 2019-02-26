@@ -42,7 +42,7 @@ Schema cdfGlobalSchema = SchemaBuilder
 		.name("archive_filename").type().stringType().noDefault()
 		.name("original_filename").type().stringType().noDefault()
 		.name("original_file_size").type().longType().noDefault()
-		.name("processed_date").type().stringType().noDefault()		
+		.name("processed_date").type().stringType().noDefault()
 		// Partition Values
 		.name("make").type().stringType().noDefault()
 		.name("model").type().stringType().noDefault()
@@ -50,18 +50,18 @@ Schema cdfGlobalSchema = SchemaBuilder
 		.endRecord()
 
 Schema cdfVarSchema = SchemaBuilder
-        .record("cdfVarRecord")
-        .fields()
-        .name("provenance_guid").type().stringType().noDefault()
-        .name("variable_name").type().stringType().noDefault()
-        .name("variable_type").type().stringType().noDefault()
-        .name("num_elements").type().intType().noDefault()
-        .name("dim").type().intType().noDefault()
-        .name("dim_sizes").type().array().items().intType().noDefault()
-        .name("dim_variances").type().array().items().booleanType().noDefault()
-        .name("rec_variance").type().intType().noDefault()
-        .name("max_records").type().intType().noDefault()
-        .name("attributes").type().map().values(cdfAttSchema).noDefault()
+		.record("cdfVarRecord")
+		.fields()
+		.name("provenance_guid").type().stringType().noDefault()
+		.name("variable_name").type().stringType().noDefault()
+		.name("variable_type").type().stringType().noDefault()
+		.name("num_elements").type().intType().noDefault()
+		.name("dim").type().intType().noDefault()
+		.name("dim_sizes").type().array().items().intType().noDefault()
+		.name("dim_variances").type().array().items().booleanType().noDefault()
+		.name("rec_variance").type().booleanType().noDefault()
+		.name("max_records").type().intType().noDefault()
+		.name("attributes").type().map().values(cdfAttSchema).noDefault()
 		// Partition Values
 		.name("make").type().stringType().noDefault()
 		.name("model").type().stringType().noDefault()
@@ -72,13 +72,14 @@ Schema cdfVarSchema = SchemaBuilder
 Schema cdfVarRecSchema = SchemaBuilder
 		.record("cdfVarRecRecord")
 		.fields()
-		.name("file_id").type().stringType().noDefault()
+		.name("provenance_guid").type().stringType().noDefault()
 		.name("variable_name").type().stringType().noDefault()
-		.name("variable_type").type().stringType().noDefault()
-		.name("variable_attributes").type().map().values(cdfAttSchema).noDefault()
 		.name("record_number").type().intType().noDefault()
-		.name("record_size").type().intType().noDefault()
 		.name("record_array").type().array().items().stringType().noDefault()
+		// Partition Values
+		.name("make").type().stringType().noDefault()
+		.name("model").type().stringType().noDefault()
+		.name("file_date").type().stringType().noDefault()
 		.endRecord()
 
 SessionFile flowFile = session.get()
@@ -87,7 +88,7 @@ flowFile.session
 
 if (!flowFile) return
 
-long startTime
+	long startTime
 
 CdfContent cdfContent
 startTime = System.nanoTime()
@@ -127,11 +128,6 @@ startTime = System.nanoTime()
 cdfGlobalFlowFile.write { OutputStream outputStream ->
 	DataFileWriter<Record> w = writer.create cdfGlobalSchema, outputStream
 	Record r = new Record(cdfGlobalSchema)
-	r.put "provenance_guid", flowFile."provenance_guid"
-	
-	CdfInfo cdfInfo = cdfContent.getCdfInfo()
-	r.put "majority", cdfInfo.getRowMajor() ? "ROW" : "COLUMN"
-	
 	Map<String,List<Record>> globalAttributeMap = new HashMap<>()
 	cdfContent.getGlobalAttributes().each{ GlobalAttribute globalAttribute ->
 		List<Record> attributeEntries = new ArrayList<>(globalAttribute.getEntries().length)
@@ -143,7 +139,9 @@ cdfGlobalFlowFile.write { OutputStream outputStream ->
 		}
 		globalAttributeMap.put globalAttribute.getName(), attributeEntries
 	}
-	
+
+	r.put "provenance_guid", flowFile."provenance_guid"
+	r.put "majority", cdfContent.cdfInfo.rowMajor ? "ROW" : "COLUMN"
 	r.put "global_attributes", globalAttributeMap
 	r.put "archive_path", flowFile."archive_path"
 	r.put "archive_filename", flowFile."archive_filename"
@@ -161,59 +159,85 @@ cdfGlobalFlowFile."cdf_write_time" = cdfWriteTime
 cdfGlobalFlowFile."cdf_total_time" = (System.nanoTime() - flowStartTime) / 1000.00 / 1000.00 / 1000.00
 REL_SUCCESS << cdfGlobalFlowFile
 
+//CDF Variables
+SessionFile cdfVarFlowFile = session.create flowFile
+cdfVarFlowFile."cdf_read_time" = cdfReadTime
+cdfVarFlowFile."cdf_extract_type" = "cdf_variable"
+cdfVarFlowFile."mime.type" = "application/avro-binary"
+
+startTime = System.nanoTime()
+cdfVarFlowFile.write { OutputStream outputStream ->
+	DataFileWriter<Record> w = writer.create cdfVarSchema, outputStream
+
+	cdfContent.getVariables().each { Variable var ->
+		Record r = new Record(cdfVarSchema)
+		Map<String, Record> variableAttributes = new HashMap<>()
+		cdfContent.variableAttributes.each { VariableAttribute variableAttribute ->
+			AttributeEntry attributeEntry = variableAttribute.getEntry var
+			if (attributeEntry != null) {
+				Record r1 = new Record(cdfAttSchema)
+				r1.put "attribute_type", attributeEntry.dataType.name
+				r1.put "attribute_value", attributeEntry.toString()
+				variableAttributes.put variableAttribute.name, r1
+			}
+		}
+		r.put "provenance_guid", flowFile."provenance_guid"
+		r.put "variable_name", var.name
+		r.put "variable_type", var.dataType.name
+		r.put "num_elements", var.descriptor.numElems
+		r.put "dim", var.descriptor.zNumDims
+		r.put "dim_sizes", var.descriptor.zDimSizes.toList()
+		r.put "dim_variances", var.descriptor.dimVarys.toList()
+		r.put "rec_variance", var.recordVariance
+		r.put "max_records", var.descriptor.maxRec
+		r.put "attributes", variableAttributes
+		r.put "make", flowFile."make"
+		r.put "model", flowFile."model"
+		r.put "file_date", flowFile."file_date"
+		w.append r
+	}
+	w.close()
+}
+
+cdfWriteTime = (System.nanoTime() - startTime) / 1000.00 / 1000.00 / 1000.00
+cdfVarFlowFile."cdf_write_time" = cdfWriteTime
+cdfVarFlowFile."cdf_total_time" = (System.nanoTime() - flowStartTime) / 1000.00 / 1000.00 / 1000.00
+REL_SUCCESS << cdfVarFlowFile
+
+// CDF Records
 SessionFile cdfRecFlowFile = session.create flowFile
 cdfRecFlowFile."cdf_read_time" = cdfReadTime
 cdfRecFlowFile."cdf_extract_type" = "cdf_variable_record"
 cdfRecFlowFile."mime.type" = "application/avro-binary"
 
-
 startTime = System.nanoTime()
-
 cdfRecFlowFile.write { OutputStream outputStream ->
 	DataFileWriter<Record> w = writer.create cdfVarRecSchema, outputStream
 
 	cdfContent.getVariables().each { Variable var ->
-		String uuid = flowFile."uuid"
-		String variableName = var.name
-		String variableType = var.dataType.name
-
-		Map<String, Record> variableAttributes = new HashMap<>()
-		cdfContent.variableAttributes.each { VariableAttribute variableAttribute ->
-			AttributeEntry attributeEntry = variableAttribute.getEntry var
-			if (attributeEntry != null) {
-				Record r = new Record(cdfAttSchema)
-				r.put "attribute_type", attributeEntry.dataType.name
-				r.put "attribute_value", attributeEntry.toString()
-				variableAttributes.put variableAttribute.name, r
-			}
-		}
 
 		for (int i = 0; i < var.recordCount; i++) {
 			Record r = new Record(cdfVarRecSchema)
 			Object tmpArray = var.createRawValueArray()
 			var.readRawRecord i, tmpArray
-
-			r.put "file_id", uuid
-			r.put "variable_name", variableName
-			r.put "variable_type", variableType
-			r.put "variable_attributes", variableAttributes
-			r.put "record_number", i + 1
-
 			List<Object> recordArray
 			if (tmpArray.getClass().isArray()) {
 				int arraySize = Array.getLength tmpArray
-				r.put "record_size", arraySize
-
 				recordArray = new ArrayList<>(arraySize)
 				for (int x = 0; x < arraySize; x++) {
 					recordArray.add Array.get(tmpArray, x).toString()
 				}
 			} else {
-				r.put "record_size", 1
 				recordArray = new ArrayList<>(1)
 				recordArray.add tmpArray.toString()
 			}
+			r.put "provenance_guid", flowFile."provenance_guid"
+			r.put "variable_name", var.name
+			r.put "record_number", i
 			r.put "record_array", recordArray
+			r.put "make", flowFile."make"
+			r.put "model", flowFile."model"
+			r.put "file_date", flowFile."file_date"
 			w.append r
 		}
 	}
