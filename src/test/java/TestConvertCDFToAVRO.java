@@ -19,7 +19,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.Stream;
 
 public class TestConvertCDFToAVRO {
@@ -47,7 +50,16 @@ public class TestConvertCDFToAVRO {
 				if (path.getFileName().toString().toLowerCase().endsWith(".cdf")) {
 //                    System.out.println("Processing " + path.getFileName());
 					try {
-						runner.enqueue(path);
+						Map<String,String> atts = new HashMap<>();
+						atts.put("fileSize", String.valueOf(Files.size(path)));
+						atts.put("provenance_guid", java.util.UUID.randomUUID().toString());
+						atts.put("archive_path", "/archive/cbm");
+						atts.put("archive_filename", path.getFileName() + ".gz");
+						atts.put("processed_date", "9999-01-01");						
+						atts.put("make", "TANK");
+						atts.put("model", "LARGE");
+						atts.put("file_date", "2000-01-01");
+						runner.enqueue(path).putAttributes(atts);
 						runner.run();
 					} catch (Exception e) {
 						throw new RuntimeException(e);
@@ -60,13 +72,13 @@ public class TestConvertCDFToAVRO {
 		for (MockFlowFile flowFile : result) {
 			System.out.println(flowFile.toString());
 
-			flowFile.getAttributes().forEach((k, v) -> {
+			new TreeMap<>(flowFile.getAttributes()).forEach((k, v) -> {
 				System.out.println(k + ":" + v);
 			});
 			DatumReader<GenericRecord> datumReader = new GenericDatumReader<>();
 			try (DataFileReader<GenericRecord> dataFileReader = new DataFileReader<>(
 					new SeekableByteArrayInput(flowFile.toByteArray()), datumReader)) {
-				System.out.println(dataFileReader.getSchema().toString(true));
+//				System.out.println(dataFileReader.getSchema().toString(true));
 //            System.out.println(new String(dataFileReader.getMeta("avro.codec")));
 				for (GenericRecord r : dataFileReader) {
 //                System.out.println(r.toString());
