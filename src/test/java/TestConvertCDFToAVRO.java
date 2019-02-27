@@ -50,15 +50,17 @@ public class TestConvertCDFToAVRO {
 				if (path.getFileName().toString().toLowerCase().endsWith(".cdf")) {
 //                    System.out.println("Processing " + path.getFileName());
 					try {
-						Map<String,String> atts = new HashMap<>();
+						Map<String, String> atts = new HashMap<>();
 						atts.put("fileSize", String.valueOf(Files.size(path)));
 						atts.put("provenance_guid", java.util.UUID.randomUUID().toString());
 						atts.put("archive_path", "/archive/cbm");
 						atts.put("archive_filename", path.getFileName() + ".gz");
-						atts.put("processed_date", "9999-01-01");						
+						atts.put("processed_date", "9999-01-01");
 						atts.put("make", "TANK");
 						atts.put("model", "LARGE");
-						atts.put("file_date", "2000-01-01");
+						atts.put("year", "2000");
+						atts.put("month", "01");
+						atts.put("day", "01");
 						runner.enqueue(path).putAttributes(atts);
 						runner.run();
 					} catch (Exception e) {
