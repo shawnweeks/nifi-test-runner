@@ -45,7 +45,7 @@ public class TestConvertCDFToAVRO {
 		String groovyScript = new String(
 				Files.readAllBytes(Paths.get("src/test/resources/groovy/convert_cdf_to_avro.groovy")), "UTF-8");
 		runner.setProperty(ExecuteGroovyScript.SCRIPT_BODY, groovyScript);
-		try (Stream<Path> paths = Files.walk(Paths.get("D:\\cdf_samples"))) {
+		try (Stream<Path> paths = Files.walk(Paths.get("src/test/resources/cdf"))) {
 			paths.filter(Files::isRegularFile).forEach(path -> {
 				if (path.getFileName().toString().toLowerCase().endsWith(".cdf")) {
 //                    System.out.println("Processing " + path.getFileName());
