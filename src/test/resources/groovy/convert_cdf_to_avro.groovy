@@ -1,13 +1,10 @@
-import org.apache.nifi.flowfile.FlowFile
 import org.apache.nifi.logging.ComponentLog
-import org.apache.nifi.processor.exception.ProcessException
-import org.apache.nifi.processors.groovyx.flow.SessionFile
+import org.apache.nifi.processors.groovyx.flow.GroovySessionFile
 
 import org.apache.avro.Schema
 import org.apache.avro.SchemaBuilder
 import org.apache.avro.file.CodecFactory
 import org.apache.avro.file.DataFileWriter
-import org.apache.avro.generic.GenericData
 import org.apache.avro.generic.GenericData.Record
 import org.apache.avro.generic.GenericDatumWriter
 
@@ -82,7 +79,8 @@ Schema cdfVarRecSchema = SchemaBuilder
         .name("file_date").type().stringType().noDefault()
         .endRecord()
 
-SessionFile flowFile = session.get()
+GroovySessionFile flowFile = session.get()
+ComponentLog LOGGER = log
 
 
 if (!flowFile) return
@@ -92,18 +90,17 @@ long startTime
 CdfContent cdfContent
 startTime = System.nanoTime()
 
-// Populate ByteBuffer from incoming FlowFile.
-ByteBuffer byteBuffer
-flowFile.read { InputStream inputStream ->
-    byteBuffer = ByteBuffer.wrap inputStream.bytes
-    inputStream.close()
-}
-
 // Setup CDF Reader
 try {
-    cdfContent = new CdfContent(new CdfReader(new SimpleNioBuf(byteBuffer, true, false)))
-} catch (IOException e) {
-    log.error "Failed to read CDF File", e
+    // Populate ByteBuffer from incoming FlowFile.
+    ByteBuffer byteBuffer
+    flowFile.read { InputStream inputStream ->
+        byteBuffer = ByteBuffer.wrap inputStream.bytes
+        cdfContent = new CdfContent(new CdfReader(new SimpleNioBuf(byteBuffer, true, false)))
+        inputStream.close()
+    }
+} catch (Exception e) {
+    LOGGER.error "Failed to read CDF File", e
     REL_FAILURE << flowFile
     return // No reason to continue if we can't read CDF File.
 }
@@ -117,7 +114,7 @@ DataFileWriter<Record> writer = new DataFileWriter<>(new GenericDatumWriter())
 writer.setCodec CodecFactory.deflateCodec(5)
 
 
-SessionFile cdfGlobalFlowFile = session.create flowFile
+GroovySessionFile cdfGlobalFlowFile = session.create flowFile
 cdfGlobalFlowFile."cdf_read_time" = cdfReadTime
 cdfGlobalFlowFile."cdf_extract_type" = "cdf_global"
 cdfGlobalFlowFile."mime.type" = "application/avro-binary"
@@ -159,7 +156,7 @@ cdfGlobalFlowFile."cdf_total_time" = (System.nanoTime() - flowStartTime) / 1000.
 REL_SUCCESS << cdfGlobalFlowFile
 
 //CDF Variables
-SessionFile cdfVarFlowFile = session.create flowFile
+GroovySessionFile cdfVarFlowFile = session.create flowFile
 cdfVarFlowFile."cdf_read_time" = cdfReadTime
 cdfVarFlowFile."cdf_extract_type" = "cdf_variable"
 cdfVarFlowFile."mime.type" = "application/avro-binary"
@@ -204,7 +201,7 @@ cdfVarFlowFile."cdf_total_time" = (System.nanoTime() - flowStartTime) / 1000.00 
 REL_SUCCESS << cdfVarFlowFile
 
 // CDF Records
-SessionFile cdfRecFlowFile = session.create flowFile
+GroovySessionFile cdfRecFlowFile = session.create flowFile
 cdfRecFlowFile."cdf_read_time" = cdfReadTime
 cdfRecFlowFile."cdf_extract_type" = "cdf_variable_record"
 cdfRecFlowFile."mime.type" = "application/avro-binary"
