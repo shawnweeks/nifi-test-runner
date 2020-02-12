@@ -13,12 +13,23 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<nifi.version>1.10.0</nifi.version>
+		<scripting.groovy.version>2.5.4</scripting.groovy.version>
 	</properties>
 
 	<dependencies>
 		<dependency>
+			<groupId>org.codehaus.groovy</groupId>
+			<artifactId>groovy-jsr223</artifactId>
+			<version>${scripting.groovy.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.nifi</groupId>
 			<artifactId>nifi-standard-processors</artifactId>
+			<version>${nifi.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.nifi</groupId>
+			<artifactId>nifi-scripting-processors</artifactId>
 			<version>${nifi.version}</version>
 		</dependency>
 		<dependency>
