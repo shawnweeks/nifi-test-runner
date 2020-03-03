@@ -54,7 +54,6 @@ class CSVRecordReader implements RecordReader {
         delimiter = variables.get("wh_txt_delim")
         String quote = variables.get("wh_txt_quote")
         String escape = variables.get("wh_txt_escape")
-        //        System.out.println("ESC:" + escape)
         int skipLines = variables.containsKey("wh_txt_skip_lines") ? Integer.parseInt(variables.get("wh_txt_skip_lines")) : 0
         
         reader = new InputStreamReader(inputStream,'UTF-8')
@@ -65,7 +64,7 @@ class CSVRecordReader implements RecordReader {
         
         if (null != delimiter) {
             if (delimiter.length() < 2) {
-                CSVFormat format = CSVFormat.newFormat('|' as char)
+                CSVFormat format = CSVFormat.newFormat(delimiter as char)
                 if (null != quote) {
                     format = format.withQuote(quote as char)
                 }
@@ -84,7 +83,6 @@ class CSVRecordReader implements RecordReader {
                     for (String item : variables.get("wh_txt_schema").split(',')) {
                         this.headerNames.add(item);
                     }
-                    System.out.println(this.headerNames);
                     format = format.withHeader(variables.get("wh_txt_schema").split(','));
                 } 
                 else if (useHeaders && hasSchema) {
@@ -100,7 +98,6 @@ class CSVRecordReader implements RecordReader {
                 CSVParser parse = CSVParser.parse(buffReader, format);
                 if (useHeaders && !hasSchema) {
                     this.headerNames = parse.getHeaderNames();
-                    //                    System.out.println(headerNames.size())
                     this.schema = getSchemaFromList(headerNames)
                 } 
                 else if (useHeaders && hasSchema) {
@@ -108,7 +105,7 @@ class CSVRecordReader implements RecordReader {
                     this.headerNames = parse.getHeaderNames();
                     checkSchema(variables.get("wh_txt_schema").split(','), headerNames);
                 }
-                //                System.out.println("TEST")
+             
                 iterator = parse.iterator();
             } else {
                 // Multi-char delimiter.
@@ -153,7 +150,6 @@ class CSVRecordReader implements RecordReader {
     }
         
     public void checkSchema(String[] recordSchema, List<String> colSubset) {
-        //        System.out.println("COUNT:" + recordSchema.length)
         if (recordSchema.length < colSubset.size()) {
             logger.error("File has more columns than schema.")
             throw new MalformedRecordException("File has more columns than schema.");
@@ -186,8 +182,6 @@ class CSVRecordReader implements RecordReader {
         recordMap.put("wh_file_date",variables.get("wh_file_date"))
         recordMap.put("wh_file_id",variables.get("wh_file_id"))
         recordMap.put("wh_row_id",rowCounter)
-        //        System.out.println("buffREC")
-        //        System.out.println(schema)
         MapRecord mapRecord = new MapRecord(schema,recordMap)
         return mapRecord
     }
@@ -205,9 +199,6 @@ class CSVRecordReader implements RecordReader {
             } else {
                 fieldCount = lineSplit.length
             }
-            System.out.println("headerNames: " + headerNames)
-            System.out.println("fieldCount: " + fieldCount)
-            //            fieldCount = lineSplit.length
             firstRecord = false
         }
         if(fieldCount != lineSplit.length){
@@ -216,17 +207,12 @@ class CSVRecordReader implements RecordReader {
         }
         Map<String, Object> recordMap = new HashMap<>()
         
-        System.out.println("row: " + lineSplit)
-        System.out.println("headers: " + headerNames)
         for (int i = 0; i < lineSplit.length; i++) {
             recordMap.put(headerNames.get(i), lineSplit[i]);
         }
-        System.out.println("processRecord: " + rowCounter);
         recordMap.put("wh_file_date",variables.get("wh_file_date"))
         recordMap.put("wh_file_id",variables.get("wh_file_id"))
         recordMap.put("wh_row_id",rowCounter)
-        //        System.out.println("buffREC")
-        //        System.out.println(schema)
         MapRecord mapRecord = new MapRecord(schema,recordMap)
         return mapRecord
     }
@@ -237,33 +223,33 @@ class CSVRecordReader implements RecordReader {
             CSVRecord record = iterator.next() as CSVRecord
             if(firstRecord){
                 if (!useHeaders && hasSchema) {
+                    fieldCount = record.size();
+                    if (record.size() > headerNames.size()) {
+                        logger.error("File has more columns than schema.")
+                        throw new MalformedRecordException("File has more columns than schema.");
+                    }
+                    //                    fieldCount = headerNames.size();
+                } 
+                else if (useHeaders && !hasSchema) {
                     fieldCount = headerNames.size();
-                } else {
-                    fieldCount = record.size()
                 }
-                System.out.println("HEY: " + fieldCount)
+                else {
+                    //                    fieldCount = record.size()
+                    fieldCount = headerNames.size()
+                    System.out.println("fieldCount: " + fieldCount)
+                }
                 firstRecord = false
             }
-            System.out.println("recordMap:" + record.toMap())
-            System.out.println("rowCount: " + rowCounter);
-            //            if (!useHeader && hasSchema) {
-            //                if (record.size() <= headerNames.size()) {
-            //                    logger.error("Expected " + headerNames.size() + " fields but encountered " + record.size() + " on row " + rowCounter)
-            //                    throw new MalformedRecordException("Expected " + headerNames.size() + " fields but encountered " + record.size() + " on row " + rowCounter)
-            //                }
-            //            } else {
             if(fieldCount != record.size()){
                 logger.error("Expected " + fieldCount + " fields but encountered " + record.size() + " on row " + rowCounter)
                 throw new MalformedRecordException("Expected " + fieldCount + " fields but encountered " + record.size() + " on row " + rowCounter)
             }
-            //            }
             Map<String, Object> recordMap = record.toMap()
                        
             recordMap.put("wh_file_date",variables.get("wh_file_date"))
             recordMap.put("wh_file_id",variables.get("wh_file_id"))
             recordMap.put("wh_row_id",rowCounter)
             MapRecord mapRecord = new MapRecord(schema,recordMap)
-            //            System.out.println("NEXT")
             return mapRecord
         }
         return null
