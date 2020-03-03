@@ -195,9 +195,22 @@ class CSVRecordReader implements RecordReader {
         final String[] lineSplit = line.split(delimiter);
         if(firstRecord){
             if (!useHeaders && hasSchema) {
+                //                fieldCount = headerNames.size();
+                fieldCount = lineSplit.size();
+                System.out.println("lineSplit: " + lineSplit.size())
+                System.out.println("headerNames: " + headerNames.size())
+                if (lineSplit.size() > headerNames.size()) {
+                    System.out.println("WTF")
+                    logger.error("File has more columns than schema.")
+                    throw new MalformedRecordException("File has more columns than schema.");
+                }
+            } 
+            else if (useHeaders && !hasSchema) {
                 fieldCount = headerNames.size();
-            } else {
-                fieldCount = lineSplit.length
+            }
+            else {
+                fieldCount = headerNames.size()
+                //                fieldCount = lineSplit.length
             }
             firstRecord = false
         }
@@ -224,19 +237,18 @@ class CSVRecordReader implements RecordReader {
             if(firstRecord){
                 if (!useHeaders && hasSchema) {
                     fieldCount = record.size();
+                    System.out.println("record: " + record.size())
+                    System.out.println("headerNames: " + headerNames.size())
                     if (record.size() > headerNames.size()) {
                         logger.error("File has more columns than schema.")
                         throw new MalformedRecordException("File has more columns than schema.");
                     }
-                    //                    fieldCount = headerNames.size();
                 } 
                 else if (useHeaders && !hasSchema) {
                     fieldCount = headerNames.size();
                 }
                 else {
-                    //                    fieldCount = record.size()
                     fieldCount = headerNames.size()
-                    System.out.println("fieldCount: " + fieldCount)
                 }
                 firstRecord = false
             }
