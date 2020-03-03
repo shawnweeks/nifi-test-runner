@@ -195,7 +195,6 @@ class CSVRecordReader implements RecordReader {
         final String[] lineSplit = line.split(delimiter);
         if(firstRecord){
             if (!useHeaders && hasSchema) {
-                //                fieldCount = headerNames.size();
                 fieldCount = lineSplit.size();
                 System.out.println("lineSplit: " + lineSplit.size())
                 System.out.println("headerNames: " + headerNames.size())
@@ -210,7 +209,6 @@ class CSVRecordReader implements RecordReader {
             }
             else {
                 fieldCount = headerNames.size()
-                //                fieldCount = lineSplit.length
             }
             firstRecord = false
         }
