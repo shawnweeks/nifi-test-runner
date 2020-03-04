@@ -88,16 +88,10 @@ class CSVRecordReader implements RecordReader {
                     
                     this.headerNames = splitStringToList(variables.get("wh_txt_schema"), ",")
                     this.schema = getSchemaFromList(this.headerNames)
-                    //                    this.schema = getSchemaFromDelimitedString(variables.get("wh_txt_schema"))
-                    //                    this.headerNames = new ArrayList<>()
-                    //                    
-                    //                    for (String item : variables.get("wh_txt_schema").split(',')) {
-                    //                        this.headerNames.add(item)
-                    //                    }
                     format = format.withHeader(variables.get("wh_txt_schema").split(','))
                 } 
                 else if (useHeaders && hasSchema) {
-                    this.schema = getSchemaFromDelimitedString(variables.get("wh_txt_schema"))
+                    this.schema = getSchemaFromList(splitStringToList(variables.get("wh_txt_schema"), ","))
             
                     format = format.withFirstRecordAsHeader()
                 }
@@ -124,33 +118,15 @@ class CSVRecordReader implements RecordReader {
                     
                     this.headerNames = splitStringToList(line, delimiter)
                     this.schema = getSchemaFromList(this.headerNames)
-                    
-                    //                    this.headerNames = new ArrayList<>()
-                    //                    for (String item : line.split(delimiter)) {
-                    //                        this.headerNames.add(item)
-                    //                    }
-                    //                    this.schema = getSchemaFromDelimitedString(line, delimiter)
                 }
                 else if (!useHeaders && hasSchema) {
                     this.headerNames = splitStringToList(variables.get("wh_txt_schema"), ",")
                     this.schema = getSchemaFromList(this.headerNames)
-                    //                    this.headerNames = new ArrayList<>()
-                    //                    for (String item : variables.get("wh_txt_schema").split(",")) {
-                    //                        this.headerNames.add(item)
-                    //                    }
-                    //                    this.schema = getSchemaFromDelimitedString(variables.get("wh_txt_schema"))
                 } 
                 else if (useHeaders && hasSchema) {
-                    // Get headers in NextRecord function.
-                    //                    final String[] line = buffReader.readLine().split(delimiter)
-                     
                     this.headerNames = splitStringToList(buffReader.readLine(), delimiter)
-                    //                    this.headerNames = new ArrayList<>()
-                    //                    for (String item : line) {
-                    //                        this.headerNames.add(item)
-                    //                    }
                     checkSchema(variables.get("wh_txt_schema").split(','), this.headerNames)
-                    this.schema = getSchemaFromDelimitedString(variables.get("wh_txt_schema"))
+                    this.schema = getSchemaFromList(splitStringToList(variables.get("wh_txt_schema"), ","))
                 }
                 else {
                     final String message = "Useheader or schema must be provided."
@@ -321,9 +297,6 @@ class CSVRecordReader implements RecordReader {
             fields.add(new RecordField(field, RecordFieldType.STRING.dataType,true))
         }
         fields.addAll(getMetaFields())
-//        fields.add(new RecordField("wh_file_date",RecordFieldType.LONG.dataType))
-//        fields.add(new RecordField("wh_file_id",RecordFieldType.STRING.dataType))
-//        fields.add(new RecordField("wh_row_id",RecordFieldType.TIMESTAMP.dataType))
         return new SimpleRecordSchema(fields)
     }
     
@@ -331,9 +304,6 @@ class CSVRecordReader implements RecordReader {
         final List<RecordField> fields = new ArrayList<>()
         fields.add(new RecordField("row_data",RecordFieldType.STRING.dataType))
         fields.addAll(getMetaFields())
-        //        fields.add(new RecordField("wh_file_date",RecordFieldType.LONG.dataType))
-        //        fields.add(new RecordField("wh_file_id",RecordFieldType.STRING.dataType))
-        //        fields.add(new RecordField("wh_row_id",RecordFieldType.TIMESTAMP.dataType))
         return new SimpleRecordSchema(fields)
     }
     
@@ -353,10 +323,6 @@ class CSVRecordReader implements RecordReader {
         }
             
         return list
-    }
-    
-    private RecordSchema getSchemaFromDelimitedString(final String schemaString){
-        return getSchemaFromList(splitStringToList(schemaString, ","))
     }
 }
 
