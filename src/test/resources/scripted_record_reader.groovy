@@ -34,10 +34,10 @@ class CSVRecordReader implements RecordReader {
     private boolean hasSchema
     private boolean useHeaders 
 
-    CSVRecordReader(Map<String, String> variables,
-        InputStream inputStream,
-        long inputLength,
-        ComponentLog logger) {
+    CSVRecordReader(final Map<String, String> variables,
+        final InputStream inputStream,
+        final long inputLength,
+        final ComponentLog logger) {
         println "Printing Variables"
         for(String var : variables){
             println var
@@ -52,11 +52,11 @@ class CSVRecordReader implements RecordReader {
         this.useHeaders = variables.containsKey("wh_txt_use_header")
   
         this.delimiter = variables.get("wh_txt_delim")
-        String quote = variables.get("wh_txt_quote")
-        String escape = variables.get("wh_txt_escape")
+        final String quote = variables.get("wh_txt_quote")
+        final String escape = variables.get("wh_txt_escape")
         int skipLines = variables.containsKey("wh_txt_skip_lines") ? Integer.parseInt(variables.get("wh_txt_skip_lines")) : 0
         
-        InputStreamReader inputStreamReader = new InputStreamReader(inputStream,'UTF-8')
+        final InputStreamReader inputStreamReader = new InputStreamReader(inputStream,'UTF-8')
         this.buffReader = new BufferedReader(inputStreamReader)
         
         if (skipLines > 0) {
@@ -85,12 +85,15 @@ class CSVRecordReader implements RecordReader {
                     format = format.withFirstRecordAsHeader()
                 }
                 else if (!useHeaders && hasSchema) {
-                    this.schema = getSchemaFromDelimitedString(variables.get("wh_txt_schema"))
-                    this.headerNames = new ArrayList<>()
                     
-                    for (String item : variables.get("wh_txt_schema").split(',')) {
-                        this.headerNames.add(item)
-                    }
+                    this.headerNames = splitStringToList(variables.get("wh_txt_schema"), ",")
+                    this.schema = getSchemaFromList(this.headerNames)
+                    //                    this.schema = getSchemaFromDelimitedString(variables.get("wh_txt_schema"))
+                    //                    this.headerNames = new ArrayList<>()
+                    //                    
+                    //                    for (String item : variables.get("wh_txt_schema").split(',')) {
+                    //                        this.headerNames.add(item)
+                    //                    }
                     format = format.withHeader(variables.get("wh_txt_schema").split(','))
                 } 
                 else if (useHeaders && hasSchema) {
@@ -99,7 +102,7 @@ class CSVRecordReader implements RecordReader {
                     format = format.withFirstRecordAsHeader()
                 }
                 else {
-                    String message = "Useheader or schema must be provided."
+                    final String message = "Useheader or schema must be provided."
                     logger.error(message)
                     throw new MalformedRecordException(message)
                 }
@@ -113,38 +116,44 @@ class CSVRecordReader implements RecordReader {
                     checkSchema(variables.get("wh_txt_schema").split(','), headerNames)
                 }
              
-                iterator = parse.iterator()
+                this.iterator = parse.iterator()
             } else {
                 // Multi-char delimiter.
                 if (useHeaders && !hasSchema) {
                     final String line = buffReader.readLine()
                     
-                    headerNames = new ArrayList<>()
-                    for (String item : line.split(delimiter)) {
-                        headerNames.add(item)
-                    }
-                    this.schema = getSchemaFromDelimitedString(line, delimiter)
+                    this.headerNames = splitStringToList(line, delimiter)
+                    this.schema = getSchemaFromList(this.headerNames)
+                    
+                    //                    this.headerNames = new ArrayList<>()
+                    //                    for (String item : line.split(delimiter)) {
+                    //                        this.headerNames.add(item)
+                    //                    }
+                    //                    this.schema = getSchemaFromDelimitedString(line, delimiter)
                 }
                 else if (!useHeaders && hasSchema) {
-                    this.headerNames = new ArrayList<>()
-                    for (String item : variables.get("wh_txt_schema").split(",")) {
-                        headerNames.add(item)
-                    }
-                    this.schema = getSchemaFromDelimitedString(variables.get("wh_txt_schema"))
+                    this.headerNames = splitStringToList(variables.get("wh_txt_schema"), ",")
+                    this.schema = getSchemaFromList(this.headerNames)
+                    //                    this.headerNames = new ArrayList<>()
+                    //                    for (String item : variables.get("wh_txt_schema").split(",")) {
+                    //                        this.headerNames.add(item)
+                    //                    }
+                    //                    this.schema = getSchemaFromDelimitedString(variables.get("wh_txt_schema"))
                 } 
                 else if (useHeaders && hasSchema) {
                     // Get headers in NextRecord function.
-                    final String[] line = buffReader.readLine().split(delimiter)
+                    //                    final String[] line = buffReader.readLine().split(delimiter)
                      
-                    headerNames = new ArrayList<>()
-                    for (String item : line) {
-                        headerNames.add(item)
-                    }
-                    checkSchema(variables.get("wh_txt_schema").split(','), headerNames)
+                    this.headerNames = splitStringToList(buffReader.readLine(), delimiter)
+                    //                    this.headerNames = new ArrayList<>()
+                    //                    for (String item : line) {
+                    //                        this.headerNames.add(item)
+                    //                    }
+                    checkSchema(variables.get("wh_txt_schema").split(','), this.headerNames)
                     this.schema = getSchemaFromDelimitedString(variables.get("wh_txt_schema"))
                 }
                 else {
-                    String message = "Useheader or schema must be provided."
+                    final String message = "Useheader or schema must be provided."
                     logger.error(message)
                     throw new MalformedRecordException(message)
                 }
@@ -157,9 +166,9 @@ class CSVRecordReader implements RecordReader {
         this.firstRecord = true
     }
         
-    public void checkSchema(String[] recordSchema, List<String> colSubset) {
+    private void checkSchema(final String[] recordSchema, final List<String> colSubset) {
         if (recordSchema.length < colSubset.size()) {
-            String message = "File has more columns than schema."
+            final String message = "File has more columns than schema."
             logger.error(message)
             throw new MalformedRecordException(message)
         }
@@ -174,7 +183,7 @@ class CSVRecordReader implements RecordReader {
             }
 
             if (!found) {
-                String message = "Column '" + col + "' not in schema."
+                final String message = "Column '" + col + "' not in schema."
                 logger.error(message)
                 throw new MalformedRecordException(message)
             }
@@ -182,22 +191,22 @@ class CSVRecordReader implements RecordReader {
     }
     
     Record processBufferedRecord() {
-        String line = buffReader.readLine()
-        if (null == line) {
+        final String record = buffReader.readLine()
+        if (null == record) {
             return null
         }
         ++rowCounter
-        Map<String, Object> recordMap = new HashMap<>()
-        recordMap.put("row_data", line)
+        final Map<String, Object> recordMap = new HashMap<>()
+        recordMap.put("row_data", record)
         recordMap.put("wh_file_date",variables.get("wh_file_date"))
         recordMap.put("wh_file_id",variables.get("wh_file_id"))
         recordMap.put("wh_row_id",rowCounter)
-        MapRecord mapRecord = new MapRecord(schema,recordMap)
+        final MapRecord mapRecord = new MapRecord(schema,recordMap)
         return mapRecord
     }
     
     Record processRecord_multiDelimiter() {
-        String line = buffReader.readLine()
+        final String line = buffReader.readLine()
         if (null == line) {
             return null
         }
@@ -207,7 +216,7 @@ class CSVRecordReader implements RecordReader {
             if (!useHeaders && hasSchema) {
                 fieldCount = record.length
                 if (record.length > headerNames.size()) {
-                    String message = "File has more columns than schema."
+                    final String message = "File has more columns than schema."
                     logger.error(message)
                     throw new MalformedRecordException(message)
                 }
@@ -218,12 +227,12 @@ class CSVRecordReader implements RecordReader {
             firstRecord = false
         }
         if(fieldCount != record.length){
-            String message = "Expected " + fieldCount + " fields but encountered " + record.length + " on row " + rowCounter
+            final String message = "Expected " + fieldCount + " fields but encountered " + record.length + " on row " + rowCounter
             logger.error(message)
             throw new MalformedRecordException(message)
         }
         
-        Map<String, Object> recordMap = new HashMap<>()
+        final Map<String, Object> recordMap = new HashMap<>()
         
         for (int i = 0; i < record.length; i++) {
             recordMap.put(headerNames.get(i), record[i])
@@ -231,21 +240,19 @@ class CSVRecordReader implements RecordReader {
         recordMap.put("wh_file_date",variables.get("wh_file_date"))
         recordMap.put("wh_file_id",variables.get("wh_file_id"))
         recordMap.put("wh_row_id",rowCounter)
-        MapRecord mapRecord = new MapRecord(schema,recordMap)
+        final MapRecord mapRecord = new MapRecord(schema,recordMap)
         return mapRecord
     }
 
     Record processRecord() {
         if(iterator.hasNext()){
             ++rowCounter
-            CSVRecord record = iterator.next() as CSVRecord
+            final CSVRecord record = iterator.next() as CSVRecord
             if(firstRecord){
                 if (!useHeaders && hasSchema) {
                     fieldCount = record.size()
-                    System.out.println("record: " + record.size())
-                    System.out.println("headerNames: " + headerNames.size())
                     if (record.size() > headerNames.size()) {
-                        String message = "File has more columns than schema."
+                        final String message = "File has more columns than schema."
                         logger.error(message)
                         throw new MalformedRecordException(message)
                     }
@@ -256,23 +263,23 @@ class CSVRecordReader implements RecordReader {
                 firstRecord = false
             }
             if(fieldCount != record.size()){
-                String message = "Expected " + fieldCount + " fields but encountered " + record.size() + " on row " + rowCounter
+                final String message = "Expected " + fieldCount + " fields but encountered " + record.size() + " on row " + rowCounter
                 logger.error(message)
                 throw new MalformedRecordException(message)
             }
-            Map<String, Object> recordMap = record.toMap()
+            final Map<String, Object> recordMap = record.toMap()
                        
             recordMap.put("wh_file_date",variables.get("wh_file_date"))
             recordMap.put("wh_file_id",variables.get("wh_file_id"))
             recordMap.put("wh_row_id",rowCounter)
-            MapRecord mapRecord = new MapRecord(schema,recordMap)
+            final MapRecord mapRecord = new MapRecord(schema,recordMap)
             return mapRecord
         }
         return null
     }
     
     @Override
-    Record nextRecord(boolean coerceTypes, boolean dropUnknownFields) throws IOException, MalformedRecordException {
+    Record nextRecord(final boolean coerceTypes, final boolean dropUnknownFields) throws IOException, MalformedRecordException {
         try {
             if (null != delimiter) {
                 if (delimiter.size() < 2) {
@@ -308,49 +315,58 @@ class CSVRecordReader implements RecordReader {
         }
     }
     
-    private RecordSchema getSchemaFromList(List<String> schemaString){
-        List<RecordField> fields = new ArrayList<>()
+    private RecordSchema getSchemaFromList(final List<String> schemaString){
+        final List<RecordField> fields = new ArrayList<>()
         for(String field : schemaString){
             fields.add(new RecordField(field, RecordFieldType.STRING.dataType,true))
         }
-        fields.add(new RecordField("wh_file_date",RecordFieldType.LONG.dataType))
-        fields.add(new RecordField("wh_file_id",RecordFieldType.STRING.dataType))
-        fields.add(new RecordField("wh_row_id",RecordFieldType.TIMESTAMP.dataType))
+        fields.addAll(getMetaFields())
+//        fields.add(new RecordField("wh_file_date",RecordFieldType.LONG.dataType))
+//        fields.add(new RecordField("wh_file_id",RecordFieldType.STRING.dataType))
+//        fields.add(new RecordField("wh_row_id",RecordFieldType.TIMESTAMP.dataType))
         return new SimpleRecordSchema(fields)
     }
     
     private RecordSchema getNoDelimiterSchema(){
-        List<RecordField> fields = new ArrayList<>()
+        final List<RecordField> fields = new ArrayList<>()
         fields.add(new RecordField("row_data",RecordFieldType.STRING.dataType))
-        fields.add(new RecordField("wh_file_date",RecordFieldType.LONG.dataType))
-        fields.add(new RecordField("wh_file_id",RecordFieldType.STRING.dataType))
-        fields.add(new RecordField("wh_row_id",RecordFieldType.TIMESTAMP.dataType))
+        fields.addAll(getMetaFields())
+        //        fields.add(new RecordField("wh_file_date",RecordFieldType.LONG.dataType))
+        //        fields.add(new RecordField("wh_file_id",RecordFieldType.STRING.dataType))
+        //        fields.add(new RecordField("wh_row_id",RecordFieldType.TIMESTAMP.dataType))
         return new SimpleRecordSchema(fields)
-    }
-
-    private RecordSchema getSchemaFromDelimitedString(String schemaString){
-        return getSchemaFromDelimitedString(schemaString, ",")
     }
     
-    private RecordSchema getSchemaFromDelimitedString(String schemaString, String splitDelimiter){
-        List<RecordField> fields = new ArrayList<>()
-        for(String field : schemaString.split(splitDelimiter)){
-            fields.add(new RecordField(field, RecordFieldType.STRING.dataType,true))
-        }
+    private List<RecordField> getMetaFields() {
+        final List<RecordField> fields = new ArrayList<>()
         fields.add(new RecordField("wh_file_date",RecordFieldType.LONG.dataType))
         fields.add(new RecordField("wh_file_id",RecordFieldType.STRING.dataType))
         fields.add(new RecordField("wh_row_id",RecordFieldType.TIMESTAMP.dataType))
-        return new SimpleRecordSchema(fields)
+        return fields
+    }
+    
+    
+    private List<String> splitStringToList(final String string, final String splitDelimiter) {
+        final List<String> list = new ArrayList<>()
+        for(String item : string.split(splitDelimiter)){
+            list.add(item)
+        }
+            
+        return list
+    }
+    
+    private RecordSchema getSchemaFromDelimitedString(final String schemaString){
+        return getSchemaFromList(splitStringToList(schemaString, ","))
     }
 }
 
 class CSVRecordReaderFactory extends AbstractControllerService implements RecordReaderFactory {
 
 
-    RecordReader createRecordReader(Map<String, String> variables,
-        InputStream inputStream,
-        long inputLength,
-        ComponentLog logger) throws MalformedRecordException, IOException, SchemaNotFoundException {
+    RecordReader createRecordReader(final Map<String, String> variables,
+        final InputStream inputStream,
+        final long inputLength,
+        final ComponentLog logger) throws MalformedRecordException, IOException, SchemaNotFoundException {
         return new CSVRecordReader(variables,inputStream,inputLength,logger)
     }
 }
