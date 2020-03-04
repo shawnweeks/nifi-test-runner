@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.UUID;
 import org.apache.avro.Schema;
 import org.apache.nifi.util.LogMessage;
+import org.junit.After;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -58,7 +59,7 @@ public class TestRecordReader {
         runner.setProperty("record-writer", "writer");
     }
 
-    //    @After
+    @After
     public void printResults() throws Exception {
         System.out.println("Printing Results");
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
@@ -77,7 +78,7 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-        System.out.println(prettyPrint(result));
+//        System.out.println(prettyPrint(result));
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
         final List<Schema.Field> fields = schema.getFields();
@@ -180,8 +181,6 @@ public class TestRecordReader {
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
-        final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-        System.out.println(prettyPrint(result));
 
         assertEquals(1, runner.getFlowFilesForRelationship("failure").size());
         List<LogMessage> log = runner.getLogger().getErrorMessages();
@@ -200,7 +199,7 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-        System.out.println(prettyPrint(result));
+//        System.out.println(prettyPrint(result));
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
         final List<Schema.Field> fields = schema.getFields();
@@ -277,7 +276,7 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-        System.out.println(prettyPrint(result));
+//        System.out.println(prettyPrint(result));
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
         final List<Schema.Field> fields = schema.getFields();
@@ -383,8 +382,6 @@ public class TestRecordReader {
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
-        final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-        System.out.println(prettyPrint(result));
 
         assertEquals(1, runner.getFlowFilesForRelationship("failure").size());
         List<LogMessage> log = runner.getLogger().getErrorMessages();
@@ -404,7 +401,8 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-        System.out.println(prettyPrint(result));
+//        System.out.println(prettyPrint(result));
+
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
         final List<Schema.Field> fields = schema.getFields();
@@ -480,7 +478,7 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-        System.out.println(prettyPrint(result));
+//        System.out.println(prettyPrint(result));
 
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
@@ -587,7 +585,7 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-        System.out.println(prettyPrint(result));
+//        System.out.println(prettyPrint(result));
 
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
@@ -696,7 +694,8 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-        System.out.println(prettyPrint(result));
+//        System.out.println(prettyPrint(result));
+
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
         final List<Schema.Field> fields = schema.getFields();
@@ -838,7 +837,8 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-        System.out.println(prettyPrint(result));
+//        System.out.println(prettyPrint(result));
+
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
         final List<Schema.Field> fields = schema.getFields();
@@ -921,7 +921,8 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-        System.out.println(prettyPrint(result));
+//        System.out.println(prettyPrint(result));
+
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
         final List<Schema.Field> fields = schema.getFields();
@@ -1068,7 +1069,8 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-        System.out.println(prettyPrint(result));
+//        System.out.println(prettyPrint(result));
+
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
         final List<Schema.Field> fields = schema.getFields();
@@ -1147,7 +1149,8 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-        System.out.println(prettyPrint(result));
+//        System.out.println(prettyPrint(result));
+
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
         final List<Schema.Field> fields = schema.getFields();
@@ -1221,7 +1224,8 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-        System.out.println(prettyPrint(result));
+//        System.out.println(prettyPrint(result));
+
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
         final List<Schema.Field> fields = schema.getFields();
@@ -1292,8 +1296,6 @@ public class TestRecordReader {
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
-        final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-        System.out.println(prettyPrint(result));
 
         assertEquals(1, runner.getFlowFilesForRelationship("failure").size());
         List<LogMessage> log = runner.getLogger().getErrorMessages();
@@ -1312,7 +1314,8 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-        System.out.println(prettyPrint(result));
+//        System.out.println(prettyPrint(result));
+
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
         final List<Schema.Field> fields = schema.getFields();
@@ -1389,7 +1392,8 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-        System.out.println(prettyPrint(result));
+//        System.out.println(prettyPrint(result));
+
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
         final List<Schema.Field> fields = schema.getFields();
@@ -1495,8 +1499,6 @@ public class TestRecordReader {
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
-        final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-        System.out.println(prettyPrint(result));
 
         assertEquals(1, runner.getFlowFilesForRelationship("failure").size());
         List<LogMessage> log = runner.getLogger().getErrorMessages();
@@ -1516,7 +1518,8 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-        System.out.println(prettyPrint(result));
+//        System.out.println(prettyPrint(result));
+
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
         final List<Schema.Field> fields = schema.getFields();
@@ -1595,7 +1598,8 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-        System.out.println(prettyPrint(result));
+//        System.out.println(prettyPrint(result));
+
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
         final List<Schema.Field> fields = schema.getFields();
@@ -1670,7 +1674,8 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-        System.out.println(prettyPrint(result));
+//        System.out.println(prettyPrint(result));
+
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
         final List<Schema.Field> fields = schema.getFields();
@@ -1775,7 +1780,7 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-        System.out.println(prettyPrint(result));
+//        System.out.println(prettyPrint(result));
 
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
@@ -1882,7 +1887,7 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-        System.out.println(prettyPrint(result));
+//        System.out.println(prettyPrint(result));
 
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
@@ -1993,7 +1998,8 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-        System.out.println(prettyPrint(result));
+//        System.out.println(prettyPrint(result));
+
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
         final List<Schema.Field> fields = schema.getFields();
@@ -2068,7 +2074,8 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-        System.out.println(prettyPrint(result));
+//        System.out.println(prettyPrint(result));
+
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
         final List<Schema.Field> fields = schema.getFields();
@@ -2142,7 +2149,8 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-        System.out.println(prettyPrint(result));
+//        System.out.println(prettyPrint(result));
+
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
         final List<Schema.Field> fields = schema.getFields();
@@ -2284,7 +2292,8 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-        System.out.println(prettyPrint(result));
+//        System.out.println(prettyPrint(result));
+
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
         final List<Schema.Field> fields = schema.getFields();
@@ -2367,7 +2376,8 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-        System.out.println(prettyPrint(result));
+//        System.out.println(prettyPrint(result));
+
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
         final List<Schema.Field> fields = schema.getFields();
@@ -2514,7 +2524,8 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-        System.out.println(prettyPrint(result));
+//        System.out.println(prettyPrint(result));
+
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
         final List<Schema.Field> fields = schema.getFields();
@@ -2599,7 +2610,8 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-        System.out.println(prettyPrint(result));
+//        System.out.println(prettyPrint(result));
+
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
         final List<Schema.Field> fields = schema.getFields();
@@ -2675,7 +2687,7 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-        System.out.println(prettyPrint(result));
+
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
         final List<Schema.Field> fields = schema.getFields();
@@ -2736,16 +2748,15 @@ public class TestRecordReader {
         assertEquals("3", record.get("wh_row_id").asText());
     }
 
-    public String prettyPrint(List<MockFlowFile> flowFiles) throws Exception {
+    public String prettyPrint(final List<MockFlowFile> flowFiles) throws Exception {
         final StringBuilder sb = new StringBuilder();
         for (MockFlowFile flowFile : flowFiles) {
-
-            DatumReader<GenericRecord> datumReader = new GenericDatumReader<>();
-            try (DataFileReader<GenericRecord> dataFileReader = new DataFileReader<>(
+            final DatumReader<GenericRecord> datumReader = new GenericDatumReader<>();
+            try (final DataFileReader<GenericRecord> dataFileReader = new DataFileReader<>(
                     new SeekableByteArrayInput(flowFile.toByteArray()), datumReader)) {
                 for (GenericRecord r : dataFileReader) {
-                    ObjectMapper mapper = new ObjectMapper();
-                    Object jsonObject = mapper.readValue(r.toString(), Object.class);
+                    final ObjectMapper mapper = new ObjectMapper();
+                    final Object jsonObject = mapper.readValue(r.toString(), Object.class);
                     sb.append(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonObject));
                 }
             }
@@ -2754,23 +2765,23 @@ public class TestRecordReader {
         return sb.toString();
     }
 
-    public Schema getSchema(MockFlowFile flowFile) throws Exception {
-        DatumReader<GenericRecord> datumReader = new GenericDatumReader<>();
-        try (DataFileReader<GenericRecord> dataFileReader = new DataFileReader<>(
+    public Schema getSchema(final MockFlowFile flowFile) throws Exception {
+        final DatumReader<GenericRecord> datumReader = new GenericDatumReader<>();
+        try (final DataFileReader<GenericRecord> dataFileReader = new DataFileReader<>(
                 new SeekableByteArrayInput(flowFile.toByteArray()), datumReader)) {
             return dataFileReader.getSchema();
         }
     }
 
-    public List<JsonNode> getJson(List<MockFlowFile> flowFiles) throws Exception {
+    public List<JsonNode> getJson(final List<MockFlowFile> flowFiles) throws Exception {
         final List<JsonNode> jsonList = new ArrayList<>();
         for (MockFlowFile flowFile : flowFiles) {
-            DatumReader<GenericRecord> datumReader = new GenericDatumReader<>();
-            try (DataFileReader<GenericRecord> dataFileReader = new DataFileReader<>(
+            final DatumReader<GenericRecord> datumReader = new GenericDatumReader<>();
+            try (final DataFileReader<GenericRecord> dataFileReader = new DataFileReader<>(
                     new SeekableByteArrayInput(flowFile.toByteArray()), datumReader)) {
                 for (GenericRecord r : dataFileReader) {
-                    ObjectMapper mapper = new ObjectMapper();
-                    JsonNode readTree = mapper.readTree(r.toString());
+                    final ObjectMapper mapper = new ObjectMapper();
+                    final JsonNode readTree = mapper.readTree(r.toString());
                     jsonList.add(readTree);
                 }
             }

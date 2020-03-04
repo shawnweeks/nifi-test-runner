@@ -16,23 +16,23 @@ import org.apache.nifi.serialization.record.RecordSchema
 import org.apache.commons.csv.QuoteMode
 
 class CSVRecordReader implements RecordReader {
-    Map<String, String> variables
-    InputStream inputStream
-    long inputLength
-    ComponentLog logger
+    private Map<String, String> variables
+    private InputStream inputStream
+    private long inputLength
+    private ComponentLog logger
 
     private RecordSchema schema
 
-    private Reader reader
     private BufferedReader buffReader
+    private CSVParser parse
     private Iterator<Object> iterator
     private long rowCounter
     private boolean firstRecord
     private int fieldCount
     private String delimiter
     private List<String> headerNames
-    boolean hasSchema
-    boolean useHeaders 
+    private boolean hasSchema
+    private boolean useHeaders 
 
     CSVRecordReader(Map<String, String> variables,
         InputStream inputStream,
@@ -48,20 +48,28 @@ class CSVRecordReader implements RecordReader {
         this.inputLength = inputLength
         this.logger = logger
 
-        hasSchema = variables.containsKey("wh_txt_schema")
-        useHeaders = variables.containsKey("wh_txt_use_header")
+        this.hasSchema = variables.containsKey("wh_txt_schema")
+        this.useHeaders = variables.containsKey("wh_txt_use_header")
   
-        delimiter = variables.get("wh_txt_delim")
+        this.delimiter = variables.get("wh_txt_delim")
         String quote = variables.get("wh_txt_quote")
         String escape = variables.get("wh_txt_escape")
         int skipLines = variables.containsKey("wh_txt_skip_lines") ? Integer.parseInt(variables.get("wh_txt_skip_lines")) : 0
         
-        reader = new InputStreamReader(inputStream,'UTF-8')
-        buffReader = new BufferedReader(reader);
-        for (int i = 0; i < skipLines; i++) {
-            System.out.println( buffReader.readLine())
-        }
+        InputStreamReader inputStreamReader = new InputStreamReader(inputStream,'UTF-8')
+        this.buffReader = new BufferedReader(inputStreamReader)
         
+        if (skipLines > 0) {
+            logger.info("Skipping " + skipLines + " lines.")
+        }
+        for (int i = 0; i < skipLines; i++) {
+            if (logger.isDebugEnabled()) {
+                logger.debug(buffReader.readLine())
+            } else {
+                buffReader.readLine()
+            }
+        }
+
         if (null != delimiter) {
             if (delimiter.length() < 2) {
                 CSVFormat format = CSVFormat.newFormat(delimiter as char)
@@ -78,12 +86,12 @@ class CSVRecordReader implements RecordReader {
                 }
                 else if (!useHeaders && hasSchema) {
                     this.schema = getSchemaFromDelimitedString(variables.get("wh_txt_schema"))
-                    this.headerNames = new ArrayList<>();
+                    this.headerNames = new ArrayList<>()
                     
                     for (String item : variables.get("wh_txt_schema").split(',')) {
-                        this.headerNames.add(item);
+                        this.headerNames.add(item)
                     }
-                    format = format.withHeader(variables.get("wh_txt_schema").split(','));
+                    format = format.withHeader(variables.get("wh_txt_schema").split(','))
                 } 
                 else if (useHeaders && hasSchema) {
                     this.schema = getSchemaFromDelimitedString(variables.get("wh_txt_schema"))
@@ -91,82 +99,84 @@ class CSVRecordReader implements RecordReader {
                     format = format.withFirstRecordAsHeader()
                 }
                 else {
-                    logger.error("Useheader or schema must be provided.")
-                    throw new MalformedRecordException("Useheader or schema must be provided.")
+                    String message = "Useheader or schema must be provided."
+                    logger.error(message)
+                    throw new MalformedRecordException(message)
                 }
-   
-                CSVParser parse = CSVParser.parse(buffReader, format);
+                this.parse = CSVParser.parse(buffReader, format)
                 if (useHeaders && !hasSchema) {
-                    this.headerNames = parse.getHeaderNames();
+                    this.headerNames = parse.getHeaderNames()
                     this.schema = getSchemaFromList(headerNames)
                 } 
                 else if (useHeaders && hasSchema) {
-                    
-                    this.headerNames = parse.getHeaderNames();
-                    checkSchema(variables.get("wh_txt_schema").split(','), headerNames);
+                    this.headerNames = parse.getHeaderNames()
+                    checkSchema(variables.get("wh_txt_schema").split(','), headerNames)
                 }
              
-                iterator = parse.iterator();
+                iterator = parse.iterator()
             } else {
                 // Multi-char delimiter.
                 if (useHeaders && !hasSchema) {
-                    final String line = buffReader.readLine();
+                    final String line = buffReader.readLine()
                     
-                    headerNames = new ArrayList<>();
+                    headerNames = new ArrayList<>()
                     for (String item : line.split(delimiter)) {
-                        headerNames.add(item);
+                        headerNames.add(item)
                     }
-                    this.schema = getSchemaFromDelimitedString(line, delimiter);
+                    this.schema = getSchemaFromDelimitedString(line, delimiter)
                 }
                 else if (!useHeaders && hasSchema) {
-                    this.headerNames = new ArrayList<>();
+                    this.headerNames = new ArrayList<>()
                     for (String item : variables.get("wh_txt_schema").split(",")) {
-                        headerNames.add(item);
+                        headerNames.add(item)
                     }
                     this.schema = getSchemaFromDelimitedString(variables.get("wh_txt_schema"))
                 } 
                 else if (useHeaders && hasSchema) {
                     // Get headers in NextRecord function.
-                    final String[] line = buffReader.readLine().split(delimiter);
+                    final String[] line = buffReader.readLine().split(delimiter)
                      
-                    headerNames = new ArrayList<>();
+                    headerNames = new ArrayList<>()
                     for (String item : line) {
-                        headerNames.add(item);
+                        headerNames.add(item)
                     }
-                    checkSchema(variables.get("wh_txt_schema").split(','), headerNames);
+                    checkSchema(variables.get("wh_txt_schema").split(','), headerNames)
                     this.schema = getSchemaFromDelimitedString(variables.get("wh_txt_schema"))
                 }
                 else {
-                    logger.error("Useheader or schema must be provided.")
-                    throw new MalformedRecordException("Useheader or schema must be provided.")
+                    String message = "Useheader or schema must be provided."
+                    logger.error(message)
+                    throw new MalformedRecordException(message)
                 }
             }
         } else {
             this.schema = getNoDelimiterSchema()
         }
 
-        rowCounter = 0
-        firstRecord = true
+        this.rowCounter = 0
+        this.firstRecord = true
     }
         
     public void checkSchema(String[] recordSchema, List<String> colSubset) {
         if (recordSchema.length < colSubset.size()) {
-            logger.error("File has more columns than schema.")
-            throw new MalformedRecordException("File has more columns than schema.");
+            String message = "File has more columns than schema."
+            logger.error(message)
+            throw new MalformedRecordException(message)
         }
 
         for (String col : colSubset) {
-            boolean found = false;
+            boolean found = false
             for (String schemaCol : recordSchema) {
                 if (col.equals(schemaCol)) {
-                    found = true;
-                    break;
+                    found = true
+                    break
                 }
             }
 
             if (!found) {
-                logger.error("Column '" + col + "' not in schema.")
-                throw new MalformedRecordException("Column '" + col + "' not in schema.");
+                String message = "Column '" + col + "' not in schema."
+                logger.error(message)
+                throw new MalformedRecordException(message)
             }
         }
     }
@@ -192,34 +202,31 @@ class CSVRecordReader implements RecordReader {
             return null
         }
         ++rowCounter
-        final String[] lineSplit = line.split(delimiter);
+        final String[] record = line.split(delimiter)
         if(firstRecord){
             if (!useHeaders && hasSchema) {
-                fieldCount = lineSplit.size();
-                System.out.println("lineSplit: " + lineSplit.size())
-                System.out.println("headerNames: " + headerNames.size())
-                if (lineSplit.size() > headerNames.size()) {
-                    System.out.println("WTF")
-                    logger.error("File has more columns than schema.")
-                    throw new MalformedRecordException("File has more columns than schema.");
+                fieldCount = record.length
+                if (record.length > headerNames.size()) {
+                    String message = "File has more columns than schema."
+                    logger.error(message)
+                    throw new MalformedRecordException(message)
                 }
             } 
-            else if (useHeaders && !hasSchema) {
-                fieldCount = headerNames.size();
-            }
             else {
                 fieldCount = headerNames.size()
             }
             firstRecord = false
         }
-        if(fieldCount != lineSplit.length){
-            logger.error("Expected " + fieldCount + " fields but encountered " + lineSplit.length + " on row " + rowCounter)
-            throw new MalformedRecordException("Expected " + fieldCount + " fields but encountered " + lineSplit.length + " on row " + rowCounter)
+        if(fieldCount != record.length){
+            String message = "Expected " + fieldCount + " fields but encountered " + record.length + " on row " + rowCounter
+            logger.error(message)
+            throw new MalformedRecordException(message)
         }
+        
         Map<String, Object> recordMap = new HashMap<>()
         
-        for (int i = 0; i < lineSplit.length; i++) {
-            recordMap.put(headerNames.get(i), lineSplit[i]);
+        for (int i = 0; i < record.length; i++) {
+            recordMap.put(headerNames.get(i), record[i])
         }
         recordMap.put("wh_file_date",variables.get("wh_file_date"))
         recordMap.put("wh_file_id",variables.get("wh_file_id"))
@@ -234,25 +241,24 @@ class CSVRecordReader implements RecordReader {
             CSVRecord record = iterator.next() as CSVRecord
             if(firstRecord){
                 if (!useHeaders && hasSchema) {
-                    fieldCount = record.size();
+                    fieldCount = record.size()
                     System.out.println("record: " + record.size())
                     System.out.println("headerNames: " + headerNames.size())
                     if (record.size() > headerNames.size()) {
-                        logger.error("File has more columns than schema.")
-                        throw new MalformedRecordException("File has more columns than schema.");
+                        String message = "File has more columns than schema."
+                        logger.error(message)
+                        throw new MalformedRecordException(message)
                     }
                 } 
-                else if (useHeaders && !hasSchema) {
-                    fieldCount = headerNames.size();
-                }
                 else {
                     fieldCount = headerNames.size()
                 }
                 firstRecord = false
             }
             if(fieldCount != record.size()){
-                logger.error("Expected " + fieldCount + " fields but encountered " + record.size() + " on row " + rowCounter)
-                throw new MalformedRecordException("Expected " + fieldCount + " fields but encountered " + record.size() + " on row " + rowCounter)
+                String message = "Expected " + fieldCount + " fields but encountered " + record.size() + " on row " + rowCounter
+                logger.error(message)
+                throw new MalformedRecordException(message)
             }
             Map<String, Object> recordMap = record.toMap()
                        
@@ -266,13 +272,13 @@ class CSVRecordReader implements RecordReader {
     }
     
     @Override
-    Record nextRecord(boolean b, boolean b1) throws IOException, MalformedRecordException {
+    Record nextRecord(boolean coerceTypes, boolean dropUnknownFields) throws IOException, MalformedRecordException {
         try {
             if (null != delimiter) {
                 if (delimiter.size() < 2) {
-                    return processRecord();
+                    return processRecord()
                 } else {
-                    return processRecord_multiDelimiter();
+                    return processRecord_multiDelimiter()
                 }
             } else {
                 return processBufferedRecord()
@@ -291,7 +297,15 @@ class CSVRecordReader implements RecordReader {
 
     @Override
     void close() throws IOException {
-        reader.close()
+        if (null != parse) {
+            this.parse.close()
+        }
+        if (null != buffReader) {
+            this.buffReader.close()
+        }
+        if (null != this.inputStream) {
+            this.inputStream.close();
+        }
     }
     
     private RecordSchema getSchemaFromList(List<String> schemaString){

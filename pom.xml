@@ -81,7 +81,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M3</version>
                 <configuration>
-                    <redirectTestOutputToFile>false</redirectTestOutputToFile>
+                    <redirectTestOutputToFile>true</redirectTestOutputToFile>
                     <argLine>-Xms16g -Xmx16g -Dorg.slf4j.simpleLogger.defaultLogLevel=trace</argLine>
                 </configuration>
             </plugin>
