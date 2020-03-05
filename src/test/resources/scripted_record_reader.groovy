@@ -74,9 +74,18 @@ class CSVRecordReader implements RecordReader {
         }
 
         if (null != delimiter) {
+            
+            if (!useHeaders && !hasSchema) {
+                final String message = "Useheader or schema must be provided."
+                logger.error(message)
+                throw new MalformedRecordException(message)
+            }
+            
             if (delimiter.length() < 2) {
                 CsvSchema.Builder format = CsvSchema.builder()
                 .setColumnSeparator(delimiter as char)
+                
+                CsvMapper mapper = new CsvMapper()
                 if (null != quote) {
                     format = format.setQuoteChar(quote as char)
                 }
@@ -84,36 +93,29 @@ class CSVRecordReader implements RecordReader {
                 if (null != escape) {
                     format = format.setEscapeChar(escape as char)
                 }
-        
-                if (useHeaders && !hasSchema) {
-                    format = format.setUseHeader(true)
-                }
-                else if (useHeaders && hasSchema) {
-                    this.schema = getSchemaFromList(splitStringToList(variables.get("wh_txt_schema"), ","))
-                    format = format.setUseHeader(true)
-                }
-                else if (!useHeaders && hasSchema) {
+                
+                if (useHeaders) {
+                    mapper = mapper.enable(CsvParser.Feature.FAIL_ON_MISSING_COLUMNS)
+                    if (hasSchema) {
+                        this.schema = getSchemaFromList(splitStringToList(variables.get("wh_txt_schema"), ","))
+                        format = format.setUseHeader(true)
+                    } else {
+                        format = format.setUseHeader(true)
+                    }
+                } else if (hasSchema) {
                     this.headerNames = splitStringToList(variables.get("wh_txt_schema"), ",")
                     this.schema = getSchemaFromList(this.headerNames)
                     
                     for (String header : headerNames) {
                         format = format.addColumn(header)
                     }
-                } 
-                else {
-                    final String message = "Useheader or schema must be provided."
-                    logger.error(message)
-                    throw new MalformedRecordException(message)
                 }
-                CsvMapper mapper = new CsvMapper()
-                CsvSchema built = format.build()
-                if (!useHeaders) {
-                    this.iterator = mapper.readerFor(Map.class).with(built).readValues(buffReader)
-                } else {
-                    mapper = mapper.enable(CsvParser.Feature.FAIL_ON_MISSING_COLUMNS)
-                    this.iterator = mapper.readerFor(Map.class).with(built).readValues(buffReader)
-                    CsvSchema derp = this.iterator.getParserSchema()
-                    Iterator<CsvSchema.Column> colIter = derp.iterator();
+        
+                this.iterator = mapper.readerFor(Map.class).with(format.build()).readValues(buffReader)
+
+                if (useHeaders) {
+                    CsvSchema csvSchema = this.iterator.getParserSchema()
+                    Iterator<CsvSchema.Column> colIter = csvSchema.iterator();
                     this.headerNames = new ArrayList<>()
                     while(colIter.hasNext()) {
                         this.headerNames.add(colIter.next().getName())
