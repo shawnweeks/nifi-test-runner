@@ -96,12 +96,10 @@ class CSVRecordReader implements RecordReader {
                 
                 if (useHeaders) {
                     mapper = mapper.enable(CsvParser.Feature.FAIL_ON_MISSING_COLUMNS)
+                    format = format.setUseHeader(true)
                     if (hasSchema) {
                         this.schema = getSchemaFromList(splitStringToList(variables.get("wh_txt_schema"), ","))
-                        format = format.setUseHeader(true)
-                    } else {
-                        format = format.setUseHeader(true)
-                    }
+                    } 
                 } else if (hasSchema) {
                     this.headerNames = splitStringToList(variables.get("wh_txt_schema"), ",")
                     this.schema = getSchemaFromList(this.headerNames)
@@ -114,8 +112,8 @@ class CSVRecordReader implements RecordReader {
                 this.iterator = mapper.readerFor(Map.class).with(format.build()).readValues(buffReader)
 
                 if (useHeaders) {
-                    CsvSchema csvSchema = this.iterator.getParserSchema()
-                    Iterator<CsvSchema.Column> colIter = csvSchema.iterator();
+                    final CsvSchema csvSchema = this.iterator.getParserSchema()
+                    final Iterator<CsvSchema.Column> colIter = csvSchema.iterator();
                     this.headerNames = new ArrayList<>()
                     while(colIter.hasNext()) {
                         this.headerNames.add(colIter.next().getName())
@@ -129,25 +127,19 @@ class CSVRecordReader implements RecordReader {
                 }
             } else {
                 // Multi-char delimiter.
-                if (useHeaders && !hasSchema) {
+                if (useHeaders) {
                     final String line = buffReader.readLine()
-                    
                     this.headerNames = splitStringToList(line, delimiter)
-                    this.schema = getSchemaFromList(this.headerNames)
-                }
-                else if (!useHeaders && hasSchema) {
+                    
+                    if (hasSchema) {
+                        checkSchema(variables.get("wh_txt_schema").split(','), this.headerNames)
+                        this.schema = getSchemaFromList(splitStringToList(variables.get("wh_txt_schema"), ","))
+                    } else {
+                        this.schema = getSchemaFromList(this.headerNames)
+                    }
+                } else if (hasSchema) {
                     this.headerNames = splitStringToList(variables.get("wh_txt_schema"), ",")
                     this.schema = getSchemaFromList(this.headerNames)
-                } 
-                else if (useHeaders && hasSchema) {
-                    this.headerNames = splitStringToList(buffReader.readLine(), delimiter)
-                    checkSchema(variables.get("wh_txt_schema").split(','), this.headerNames)
-                    this.schema = getSchemaFromList(splitStringToList(variables.get("wh_txt_schema"), ","))
-                }
-                else {
-                    final String message = "Useheader or schema must be provided."
-                    logger.error(message)
-                    throw new MalformedRecordException(message)
                 }
             }
         } else {
