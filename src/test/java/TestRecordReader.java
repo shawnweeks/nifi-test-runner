@@ -1290,7 +1290,7 @@ public class TestRecordReader {
 
         assertEquals(1, runner.getFlowFilesForRelationship("failure").size());
         List<LogMessage> log = runner.getLogger().getErrorMessages();
-        assertTrue(log.get(0).getMsg().contains("File has more columns than schema."));
+        assertTrue(log.get(0).getMsg().contains("Too many entries: expected at most 2 (value #2 (3 chars) \"now\")"));
     }
 
     @Test
@@ -1474,7 +1474,7 @@ public class TestRecordReader {
 
         assertEquals(1, runner.getFlowFilesForRelationship("failure").size());
         List<LogMessage> log = runner.getLogger().getErrorMessages();
-        assertTrue(log.get(0).getMsg().contains("Expected 3 fields but encountered 4 on row 2"));
+        assertTrue(log.get(0).getMsg().contains("Too many entries: expected at most 3 (value #3 (3 chars) \"two\")"));
     }
 
     @Test
@@ -1491,7 +1491,7 @@ public class TestRecordReader {
 
         assertEquals(1, runner.getFlowFilesForRelationship("failure").size());
         List<LogMessage> log = runner.getLogger().getErrorMessages();
-        assertTrue(log.get(0).getMsg().contains("File has more columns than schema."));
+        assertTrue(log.get(0).getMsg().contains("Too many entries: expected at most 2 (value #2 (3 chars) \"now\")"));
     }
 
     @Test
@@ -1751,7 +1751,7 @@ public class TestRecordReader {
 
         assertEquals(1, runner.getFlowFilesForRelationship("failure").size());
         List<LogMessage> log = runner.getLogger().getErrorMessages();
-        assertTrue(log.get(0).getMsg().contains("Expected 3 fields but encountered 4 on row 2"));
+        assertTrue(log.get(0).getMsg().contains("Too many entries: expected at most 3 (value #3 (3 chars) \"two\")"));
     }
 
     @Test

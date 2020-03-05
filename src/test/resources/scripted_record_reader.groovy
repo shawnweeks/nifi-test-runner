@@ -29,7 +29,6 @@ class CSVRecordReader implements RecordReader {
 
     private BufferedReader buffReader
     private MappingIterator<Map<String, Object>> iterator
-    private MappingIterator<String[]> noHeaderIterator
     private long rowCounter
     private boolean firstRecord
     private int fieldCount
@@ -89,18 +88,18 @@ class CSVRecordReader implements RecordReader {
                 if (useHeaders && !hasSchema) {
                     format = format.setUseHeader(true)
                 }
+                else if (useHeaders && hasSchema) {
+                    this.schema = getSchemaFromList(splitStringToList(variables.get("wh_txt_schema"), ","))
+                    format = format.setUseHeader(true)
+                }
                 else if (!useHeaders && hasSchema) {
                     this.headerNames = splitStringToList(variables.get("wh_txt_schema"), ",")
                     this.schema = getSchemaFromList(this.headerNames)
                     
                     for (String header : headerNames) {
-                        //                        format = format.addColumn(header)
+                        format = format.addColumn(header)
                     }
                 } 
-                else if (useHeaders && hasSchema) {
-                    this.schema = getSchemaFromList(splitStringToList(variables.get("wh_txt_schema"), ","))
-                    format = format.setUseHeader(true)
-                }
                 else {
                     final String message = "Useheader or schema must be provided."
                     logger.error(message)
@@ -109,8 +108,7 @@ class CSVRecordReader implements RecordReader {
                 CsvMapper mapper = new CsvMapper()
                 CsvSchema built = format.build()
                 if (!useHeaders) {
-                    mapper = mapper.enable(CsvParser.Feature.WRAP_AS_ARRAY)
-                    this.noHeaderIterator = mapper.readerFor(String[].class).with(built).readValues(buffReader)
+                    this.iterator = mapper.readerFor(Map.class).with(built).readValues(buffReader)
                 } else {
                     mapper = mapper.enable(CsvParser.Feature.FAIL_ON_MISSING_COLUMNS)
                     this.iterator = mapper.readerFor(Map.class).with(built).readValues(buffReader)
@@ -234,37 +232,6 @@ class CSVRecordReader implements RecordReader {
         return mapRecord
     }
     
-    Record processRecord_noHeader() {
-        if(noHeaderIterator.hasNext()){
-            ++rowCounter
-            final String[] record = noHeaderIterator.next()
-            if(firstRecord){
-                fieldCount = record.length
-                if (record.length > headerNames.size()) {
-                    final String message = "File has more columns than schema."
-                    throw new MalformedRecordException(message)
-                }
-                firstRecord = false
-            }
-            if(fieldCount != record.length){
-                final String message = "Expected " + fieldCount + " fields but encountered " + record.length + " on row " + rowCounter
-                throw new MalformedRecordException(message)
-            }
-            final Map<String, Object> recordMap = new HashMap<>()
-        
-            for (int i = 0; i < record.length; i++) {
-                recordMap.put(headerNames.get(i), record[i])
-            }
-                       
-            recordMap.put("wh_file_date",variables.get("wh_file_date"))
-            recordMap.put("wh_file_id",variables.get("wh_file_id"))
-            recordMap.put("wh_row_id",rowCounter)
-            final MapRecord mapRecord = new MapRecord(schema,recordMap)
-            return mapRecord
-        }
-        return null
-    }
-
     Record processRecord() {
         if(iterator.hasNext()){
             ++rowCounter
@@ -302,11 +269,7 @@ class CSVRecordReader implements RecordReader {
         try {
             if (null != delimiter) {
                 if (delimiter.size() < 2) {
-                    if (useHeaders) {
-                        return processRecord()
-                    } else {
-                        processRecord_noHeader()
-                    }
+                    return processRecord()
                 } else {
                     return processRecord_multiDelimiter()
                 }
@@ -327,9 +290,6 @@ class CSVRecordReader implements RecordReader {
 
     @Override
     void close() throws IOException {
-        if (null != this.noHeaderIterator) {
-            this.noHeaderIterator.close()
-        }
         if (null != this.iterator) {
             this.iterator.close()
         }
