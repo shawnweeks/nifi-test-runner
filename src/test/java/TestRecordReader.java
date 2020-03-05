@@ -78,7 +78,7 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-//        System.out.println(prettyPrint(result));
+
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
         final List<Schema.Field> fields = schema.getFields();
@@ -199,7 +199,7 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-//        System.out.println(prettyPrint(result));
+
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
         final List<Schema.Field> fields = schema.getFields();
@@ -276,7 +276,7 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-//        System.out.println(prettyPrint(result));
+
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
         final List<Schema.Field> fields = schema.getFields();
@@ -401,7 +401,6 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-//        System.out.println(prettyPrint(result));
 
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
@@ -478,7 +477,6 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-//        System.out.println(prettyPrint(result));
 
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
@@ -585,7 +583,6 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-//        System.out.println(prettyPrint(result));
 
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
@@ -694,7 +691,6 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-//        System.out.println(prettyPrint(result));
 
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
@@ -837,7 +833,6 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-//        System.out.println(prettyPrint(result));
 
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
@@ -921,7 +916,6 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-//        System.out.println(prettyPrint(result));
 
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
@@ -1069,7 +1063,6 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-//        System.out.println(prettyPrint(result));
 
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
@@ -1149,7 +1142,6 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-//        System.out.println(prettyPrint(result));
 
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
@@ -1224,7 +1216,6 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-//        System.out.println(prettyPrint(result));
 
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
@@ -1314,7 +1305,6 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-//        System.out.println(prettyPrint(result));
 
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
@@ -1392,7 +1382,6 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-//        System.out.println(prettyPrint(result));
 
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
@@ -1518,7 +1507,6 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-//        System.out.println(prettyPrint(result));
 
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
@@ -1598,7 +1586,6 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-//        System.out.println(prettyPrint(result));
 
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
@@ -1674,7 +1661,6 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-//        System.out.println(prettyPrint(result));
 
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
@@ -1780,7 +1766,6 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-//        System.out.println(prettyPrint(result));
 
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
@@ -1855,7 +1840,7 @@ public class TestRecordReader {
 
         assertEquals(1, runner.getFlowFilesForRelationship("failure").size());
         List<LogMessage> log = runner.getLogger().getErrorMessages();
-        assertTrue(log.get(0).getMsg().contains("Expected 4 fields but encountered 3 on row 1"));
+        assertTrue(log.get(0).getMsg().contains("Not enough column values: expected 4, found 3"));
     }
 
     @Test
@@ -1871,7 +1856,7 @@ public class TestRecordReader {
 
         assertEquals(1, runner.getFlowFilesForRelationship("failure").size());
         List<LogMessage> log = runner.getLogger().getErrorMessages();
-        assertTrue(log.get(0).getMsg().contains("Expected 3 fields but encountered 4 on row 2"));
+        assertTrue(log.get(0).getMsg().contains("Too many entries: expected at most 3 (value #3 (3 chars) \"two\")"));
     }
 
     @Test
@@ -1887,7 +1872,6 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-//        System.out.println(prettyPrint(result));
 
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
@@ -1963,7 +1947,7 @@ public class TestRecordReader {
 
         assertEquals(1, runner.getFlowFilesForRelationship("failure").size());
         List<LogMessage> log = runner.getLogger().getErrorMessages();
-        assertTrue(log.get(0).getMsg().contains("Expected 4 fields but encountered 3 on row 1"));
+        assertTrue(log.get(0).getMsg().contains("Not enough column values: expected 4, found 3"));
     }
 
     @Test
@@ -1980,7 +1964,7 @@ public class TestRecordReader {
 
         assertEquals(1, runner.getFlowFilesForRelationship("failure").size());
         List<LogMessage> log = runner.getLogger().getErrorMessages();
-        assertTrue(log.get(0).getMsg().contains("Expected 3 fields but encountered 4 on row 2"));
+        assertTrue(log.get(0).getMsg().contains("Too many entries: expected at most 3 (value #3 (3 chars) \"two\")"));
     }
 
     @Test
@@ -1998,7 +1982,6 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-//        System.out.println(prettyPrint(result));
 
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
@@ -2074,7 +2057,6 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-//        System.out.println(prettyPrint(result));
 
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
@@ -2149,7 +2131,6 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-//        System.out.println(prettyPrint(result));
 
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
@@ -2225,7 +2206,7 @@ public class TestRecordReader {
 
         assertEquals(1, runner.getFlowFilesForRelationship("failure").size());
         List<LogMessage> log = runner.getLogger().getErrorMessages();
-        assertTrue(log.get(0).getMsg().contains("Expected 4 fields but encountered 3 on row 1"));
+        assertTrue(log.get(0).getMsg().contains("Not enough column values: expected 4, found 3"));
     }
 
     @Test
@@ -2242,7 +2223,7 @@ public class TestRecordReader {
 
         assertEquals(1, runner.getFlowFilesForRelationship("failure").size());
         List<LogMessage> log = runner.getLogger().getErrorMessages();
-        assertTrue(log.get(0).getMsg().contains("Expected 3 fields but encountered 4 on row 2"));
+        assertTrue(log.get(0).getMsg().contains("Too many entries: expected at most 3 (value #3 (3 chars) \"two\")"));
     }
 
     @Test
@@ -2292,7 +2273,6 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-//        System.out.println(prettyPrint(result));
 
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
@@ -2376,7 +2356,6 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-//        System.out.println(prettyPrint(result));
 
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
@@ -2453,7 +2432,7 @@ public class TestRecordReader {
 
         assertEquals(1, runner.getFlowFilesForRelationship("failure").size());
         List<LogMessage> log = runner.getLogger().getErrorMessages();
-        assertTrue(log.get(0).getMsg().contains("Expected 4 fields but encountered 3 on row 1"));
+        assertTrue(log.get(0).getMsg().contains("Not enough column values: expected 4, found 3"));
     }
 
     @Test
@@ -2471,7 +2450,7 @@ public class TestRecordReader {
 
         assertEquals(1, runner.getFlowFilesForRelationship("failure").size());
         List<LogMessage> log = runner.getLogger().getErrorMessages();
-        assertTrue(log.get(0).getMsg().contains("Expected 3 fields but encountered 4 on row 2"));
+        assertTrue(log.get(0).getMsg().contains("Too many entries: expected at most 3 (value #3 (3 chars) \"two\")"));
     }
 
     @Test
@@ -2524,7 +2503,6 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-//        System.out.println(prettyPrint(result));
 
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
@@ -2610,7 +2588,6 @@ public class TestRecordReader {
         runner.run();
 
         final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
-//        System.out.println(prettyPrint(result));
 
         assertEquals(1, result.size());
         final Schema schema = getSchema(result.get(0));
