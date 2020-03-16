@@ -36,6 +36,27 @@ class CSVRecordReader implements RecordReader {
     private List<String> headerNames
     private boolean hasSchema
     private boolean useHeaders 
+    
+    public static enum CsvAttribute {
+        SCHEMA("wh_txt_schema"),
+        DELIM("wh_txt_delim"),
+        ESCAPE("wh_txt_escape"),
+        QUOTE("wh_txt_quote"),
+        USE_HEADER("wh_txt_use_header"),
+        SKIP_LINES("wh_txt_skip_lines"),
+        FILE_DATE("wh_file_date"),
+        FILE_ID("wh_file_id")
+
+        private final String attribute
+
+        private CsvAttribute(final String attribute) {
+            this.attribute = attribute
+        }
+
+        public String getAttribute() {
+            return this.attribute
+        }
+    }
 
     CSVRecordReader(final Map<String, String> variables,
         final InputStream inputStream,
@@ -51,13 +72,46 @@ class CSVRecordReader implements RecordReader {
         this.inputLength = inputLength
         this.logger = logger
 
-        this.hasSchema = variables.containsKey("wh_txt_schema")
-        this.useHeaders = variables.containsKey("wh_txt_use_header")
+        final String schemaAttribute = variables.get(CsvAttribute.SCHEMA.getAttribute())
+        if (null != schemaAttribute && !schemaAttribute.trim().isEmpty()) {
+            this.hasSchema = true
+        } else {
+            this.hasSchema = false
+        }
+        
+        final String useHeaderAttribute = variables.get(CsvAttribute.USE_HEADER.getAttribute())
+        if (null != useHeaderAttribute && !useHeaderAttribute.trim().isEmpty()) {
+            if (useHeaderAttribute.equalsIgnoreCase("y")) {
+                this.useHeaders = true
+            } else if (useHeaderAttribute.equalsIgnoreCase("n")) {
+                this.useHeaders = false
+            } else {
+                final String message = "wh_txt_use_header has an unknown value: \"" + useHeaderAttribute + "\""
+                logger.error(message)
+                throw new MalformedRecordException(message)
+            }
+        } else {
+            this.useHeaders = false
+        }
   
-        this.delimiter = variables.get("wh_txt_delim")
-        final String quote = variables.get("wh_txt_quote")
-        final String escape = variables.get("wh_txt_escape")
-        int skipLines = variables.containsKey("wh_txt_skip_lines") ? Integer.parseInt(variables.get("wh_txt_skip_lines")) : 0
+        this.delimiter = variables.get(CsvAttribute.DELIM.getAttribute())
+        if (null != this.delimiter && this.delimiter.equalsIgnoreCase("")) {
+            this.delimiter = null
+        }
+        String quote = variables.get(CsvAttribute.QUOTE.getAttribute())
+        if (null != quote && quote.trim().isEmpty()) {
+            quote = null
+        }
+        String escape = variables.get(CsvAttribute.ESCAPE.getAttribute())
+        if (null != escape && escape.trim().isEmpty()) {
+            escape = null
+        }
+        
+        int skipLines = 0;
+        final String skipLinesAttribute = variables.get(CsvAttribute.SKIP_LINES.getAttribute())
+        if (null != skipLinesAttribute && !skipLinesAttribute.trim().isEmpty()) {
+            skipLines = Integer.parseInt(skipLinesAttribute)
+        }
         
         final InputStreamReader inputStreamReader = new InputStreamReader(inputStream,'UTF-8')
         this.buffReader = new BufferedReader(inputStreamReader)
@@ -98,10 +152,10 @@ class CSVRecordReader implements RecordReader {
                     mapper = mapper.enable(CsvParser.Feature.FAIL_ON_MISSING_COLUMNS)
                     format = format.setUseHeader(true)
                     if (hasSchema) {
-                        this.schema = getSchemaFromList(splitStringToList(variables.get("wh_txt_schema"), ","))
+                        this.schema = getSchemaFromList(splitStringToList(variables.get(CsvAttribute.SCHEMA.getAttribute()), ","))
                     } 
                 } else if (hasSchema) {
-                    this.headerNames = splitStringToList(variables.get("wh_txt_schema"), ",")
+                    this.headerNames = splitStringToList(variables.get(CsvAttribute.SCHEMA.getAttribute()), ",")
                     this.schema = getSchemaFromList(this.headerNames)
                     
                     for (String header : headerNames) {
@@ -122,7 +176,7 @@ class CSVRecordReader implements RecordReader {
                     if (!hasSchema) {
                         this.schema = getSchemaFromList(headerNames)
                     } else {
-                        checkSchema(variables.get("wh_txt_schema").split(','), headerNames)
+                        checkSchema(variables.get(CsvAttribute.SCHEMA.getAttribute()).split(','), headerNames)
                     }
                 }
             } else {
@@ -132,13 +186,13 @@ class CSVRecordReader implements RecordReader {
                     this.headerNames = splitStringToList(line, delimiter)
                     
                     if (hasSchema) {
-                        checkSchema(variables.get("wh_txt_schema").split(','), this.headerNames)
-                        this.schema = getSchemaFromList(splitStringToList(variables.get("wh_txt_schema"), ","))
+                        checkSchema(variables.get(CsvAttribute.SCHEMA.getAttribute()).split(','), this.headerNames)
+                        this.schema = getSchemaFromList(splitStringToList(variables.get(CsvAttribute.SCHEMA.getAttribute()), ","))
                     } else {
                         this.schema = getSchemaFromList(this.headerNames)
                     }
                 } else if (hasSchema) {
-                    this.headerNames = splitStringToList(variables.get("wh_txt_schema"), ",")
+                    this.headerNames = splitStringToList(variables.get(CsvAttribute.SCHEMA.getAttribute()), ",")
                     this.schema = getSchemaFromList(this.headerNames)
                 }
             }
@@ -160,7 +214,7 @@ class CSVRecordReader implements RecordReader {
         for (String col : colSubset) {
             boolean found = false
             for (String schemaCol : recordSchema) {
-                if (col.equals(schemaCol)) {
+                if (col.equalsIgnoreCase(schemaCol)) {
                     found = true
                     break
                 }
@@ -182,8 +236,8 @@ class CSVRecordReader implements RecordReader {
         ++rowCounter
         final Map<String, Object> recordMap = new HashMap<>()
         recordMap.put("row_data", record)
-        recordMap.put("wh_file_date",variables.get("wh_file_date"))
-        recordMap.put("wh_file_id",variables.get("wh_file_id"))
+        recordMap.put("wh_file_date",variables.get(CsvAttribute.FILE_DATE.getAttribute()))
+        recordMap.put("wh_file_id",variables.get(CsvAttribute.FILE_ID.getAttribute()))
         recordMap.put("wh_row_id",rowCounter)
         final MapRecord mapRecord = new MapRecord(schema,recordMap)
         return mapRecord
@@ -219,8 +273,8 @@ class CSVRecordReader implements RecordReader {
         for (int i = 0; i < record.length; i++) {
             recordMap.put(headerNames.get(i), record[i])
         }
-        recordMap.put("wh_file_date",variables.get("wh_file_date"))
-        recordMap.put("wh_file_id",variables.get("wh_file_id"))
+        recordMap.put("wh_file_date",variables.get(CsvAttribute.FILE_DATE.getAttribute()))
+        recordMap.put("wh_file_id",variables.get(CsvAttribute.FILE_ID.getAttribute()))
         recordMap.put("wh_row_id",rowCounter)
         final MapRecord mapRecord = new MapRecord(schema,recordMap)
         return mapRecord
@@ -249,8 +303,8 @@ class CSVRecordReader implements RecordReader {
             }
             final Map<String, String> recordMap = new LinkedHashMap<>(record)
                        
-            recordMap.put("wh_file_date",variables.get("wh_file_date"))
-            recordMap.put("wh_file_id",variables.get("wh_file_id"))
+            recordMap.put("wh_file_date",variables.get(CsvAttribute.FILE_DATE.getAttribute()))
+            recordMap.put("wh_file_id",variables.get(CsvAttribute.FILE_ID.getAttribute()))
             recordMap.put("wh_row_id",rowCounter)
             final MapRecord mapRecord = new MapRecord(schema,recordMap)
             return mapRecord

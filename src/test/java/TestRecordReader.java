@@ -469,7 +469,7 @@ public class TestRecordReader {
     public void testProcessor_multiDelim_useHeader_noSchema() throws Exception {
         Path path = Paths.get("src/test/resources/samples/multiDelimiter_useHeader_noSchema.csv");
         Map<String, String> attributes = new HashMap<>();
-        attributes.put("wh_txt_use_header", "1");
+        attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "<=>");
         attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
         attributes.put("wh_file_id", UUID.randomUUID().toString());
@@ -542,7 +542,7 @@ public class TestRecordReader {
     public void testProcessor_multiDelim_useHeader_noSchema_extraColsInitial() throws Exception {
         Path path = Paths.get("src/test/resources/samples/multiDelimiter_useHeader_noSchema_extraCols.csv");
         Map<String, String> attributes = new HashMap<>();
-        attributes.put("wh_txt_use_header", "1");
+        attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "<=>");
         attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
         attributes.put("wh_file_id", UUID.randomUUID().toString());
@@ -558,7 +558,7 @@ public class TestRecordReader {
     public void testProcessor_multiDelim_useHeader_noSchema_extraColsLater() throws Exception {
         Path path = Paths.get("src/test/resources/samples/multiDelimiter_useHeader_noSchema_extraColsLater.csv");
         Map<String, String> attributes = new HashMap<>();
-        attributes.put("wh_txt_use_header", "1");
+        attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "<=>");
         attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
         attributes.put("wh_file_id", UUID.randomUUID().toString());
@@ -574,7 +574,7 @@ public class TestRecordReader {
     public void testProcessor_multiDelim_useHeader_noSchema_skipLines() throws Exception {
         Path path = Paths.get("src/test/resources/samples/multiDelimiter_useHeader_noSchema_skipLines.csv");
         Map<String, String> attributes = new HashMap<>();
-        attributes.put("wh_txt_use_header", "1");
+        attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "<=>");
         attributes.put("wh_txt_skip_lines", "2");
         attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
@@ -648,7 +648,7 @@ public class TestRecordReader {
     public void testProcessor_multiDelim_useHeader_noSchema_skipLines_extraColsInitial() throws Exception {
         Path path = Paths.get("src/test/resources/samples/multiDelimiter_useHeader_noSchema_skipLines_extraCols.csv");
         Map<String, String> attributes = new HashMap<>();
-        attributes.put("wh_txt_use_header", "1");
+        attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "<=>");
         attributes.put("wh_txt_skip_lines", "2");
         attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
@@ -665,7 +665,7 @@ public class TestRecordReader {
     public void testProcessor_multiDelim_useHeader_noSchema_skipLines_extraColsLater() throws Exception {
         Path path = Paths.get("src/test/resources/samples/multiDelimiter_useHeader_noSchema_skipLines_extraColsLater.csv");
         Map<String, String> attributes = new HashMap<>();
-        attributes.put("wh_txt_use_header", "1");
+        attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "<=>");
         attributes.put("wh_txt_skip_lines", "2");
         attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
@@ -682,7 +682,7 @@ public class TestRecordReader {
     public void testProcessor_multiDelim_useHeader_useSchema() throws Exception {
         Path path = Paths.get("src/test/resources/samples/multiDelimiter_useHeader_useSchema.csv");
         Map<String, String> attributes = new HashMap<>();
-        attributes.put("wh_txt_use_header", "1");
+        attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "<=>");
         attributes.put("wh_txt_schema", "column_1,column_2,column_3");
         attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
@@ -756,7 +756,7 @@ public class TestRecordReader {
     public void testProcessor_multiDelim_useHeader_useSchema_extraColsInitial() throws Exception {
         Path path = Paths.get("src/test/resources/samples/multiDelimiter_useHeader_useSchema_extraCols.csv");
         Map<String, String> attributes = new HashMap<>();
-        attributes.put("wh_txt_use_header", "1");
+        attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_schema", "column_1,column_2,column_3,column_4");
         attributes.put("wh_txt_delim", "<=>");
         attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
@@ -773,7 +773,7 @@ public class TestRecordReader {
     public void testProcessor_multiDelim_useHeader_useSchema_extraColsLater() throws Exception {
         Path path = Paths.get("src/test/resources/samples/multiDelimiter_useHeader_useSchema_extraColsLater.csv");
         Map<String, String> attributes = new HashMap<>();
-        attributes.put("wh_txt_use_header", "1");
+        attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_schema", "column_1,column_2,column_3");
         attributes.put("wh_txt_delim", "<=>");
         attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
@@ -790,7 +790,7 @@ public class TestRecordReader {
     public void testProcessor_multiDelim_useHeader_useSchema_headerHasDiffCol() throws Exception {
         Path path = Paths.get("src/test/resources/samples/multiDelimiter_useHeader_useSchema_diffCol.csv");
         Map<String, String> attributes = new HashMap<>();
-        attributes.put("wh_txt_use_header", "1");
+        attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "<=>");
         attributes.put("wh_txt_schema", "column_1,column_2,column_3");
         attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
@@ -807,7 +807,7 @@ public class TestRecordReader {
     public void testProcessor_multiDelim_useHeader_useSchema_schemaHasLessColumns() throws Exception {
         Path path = Paths.get("src/test/resources/samples/multiDelimiter_useHeader_useSchema.csv");
         Map<String, String> attributes = new HashMap<>();
-        attributes.put("wh_txt_use_header", "1");
+        attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "<=>");
         attributes.put("wh_txt_schema", "column_1,column_2");
         attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
@@ -824,7 +824,7 @@ public class TestRecordReader {
     public void testProcessor_multiDelim_useHeader_useSchema_schemaHasMoreColumns() throws Exception {
         Path path = Paths.get("src/test/resources/samples/multiDelimiter_useHeader_useSchema.csv");
         Map<String, String> attributes = new HashMap<>();
-        attributes.put("wh_txt_use_header", "1");
+        attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "<=>");
         attributes.put("wh_txt_schema", "column_1,column_2,column_3,column_4");
         attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
@@ -906,7 +906,7 @@ public class TestRecordReader {
     public void testProcessor_multiDelim_useHeader_useSchema_skipLines() throws Exception {
         Path path = Paths.get("src/test/resources/samples/multiDelimiter_useHeader_useSchema_skipLines.csv");
         Map<String, String> attributes = new HashMap<>();
-        attributes.put("wh_txt_use_header", "1");
+        attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "<=>");
         attributes.put("wh_txt_skip_lines", "2");
         attributes.put("wh_txt_schema", "column_1,column_2,column_3");
@@ -981,7 +981,7 @@ public class TestRecordReader {
     public void testProcessor_multiDelim_useHeader_useSchema_skipLines_extraColsInitial() throws Exception {
         Path path = Paths.get("src/test/resources/samples/multiDelimiter_useHeader_useSchema_skipLines_extraCols.csv");
         Map<String, String> attributes = new HashMap<>();
-        attributes.put("wh_txt_use_header", "1");
+        attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_schema", "column_1,column_2,column_3,column_4");
         attributes.put("wh_txt_delim", "<=>");
         attributes.put("wh_txt_skip_lines", "2");
@@ -999,7 +999,7 @@ public class TestRecordReader {
     public void testProcessor_multiDelim_useHeader_useSchema_skipLines_extraColsLater() throws Exception {
         Path path = Paths.get("src/test/resources/samples/multiDelimiter_useHeader_useSchema_skipLines_extraColsLater.csv");
         Map<String, String> attributes = new HashMap<>();
-        attributes.put("wh_txt_use_header", "1");
+        attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_schema", "column_1,column_2,column_3");
         attributes.put("wh_txt_delim", "<=>");
         attributes.put("wh_txt_skip_lines", "2");
@@ -1017,7 +1017,7 @@ public class TestRecordReader {
     public void testProcessor_multiDelim_useHeader_useSchema_skipLines_headerHasDiffCol() throws Exception {
         Path path = Paths.get("src/test/resources/samples/multiDelimiter_useHeader_useSchema_skipLines_diffCol.csv");
         Map<String, String> attributes = new HashMap<>();
-        attributes.put("wh_txt_use_header", "1");
+        attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "<=>");
         attributes.put("wh_txt_skip_lines", "2");
         attributes.put("wh_txt_schema", "column_1,column_2,column_3");
@@ -1035,7 +1035,7 @@ public class TestRecordReader {
     public void testProcessor_multiDelim_useHeader_useSchema_skipLines_schemaHasLessColumns() throws Exception {
         Path path = Paths.get("src/test/resources/samples/multiDelimiter_useHeader_useSchema_skipLines.csv");
         Map<String, String> attributes = new HashMap<>();
-        attributes.put("wh_txt_use_header", "1");
+        attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "<=>");
         attributes.put("wh_txt_skip_lines", "2");
         attributes.put("wh_txt_schema", "column_1,column_2");
@@ -1053,7 +1053,7 @@ public class TestRecordReader {
     public void testProcessor_multiDelim_useHeader_useSchema_skipLines_schemaHasMoreColumns() throws Exception {
         Path path = Paths.get("src/test/resources/samples/multiDelimiter_useHeader_useSchema_skipLines.csv");
         Map<String, String> attributes = new HashMap<>();
-        attributes.put("wh_txt_use_header", "1");
+        attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "<=>");
         attributes.put("wh_txt_skip_lines", "2");
         attributes.put("wh_txt_schema", "column_1,column_2,column_3,column_4");
@@ -1758,7 +1758,7 @@ public class TestRecordReader {
     public void testProcessor_useHeader_noSchema() throws Exception {
         Path path = Paths.get("src/test/resources/samples/useHeader_noSchema.csv");
         Map<String, String> attributes = new HashMap<>();
-        attributes.put("wh_txt_use_header", "1");
+        attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "|");
         attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
         attributes.put("wh_file_id", UUID.randomUUID().toString());
@@ -1831,7 +1831,7 @@ public class TestRecordReader {
     public void testProcessor_useHeader_noSchema_extraColsInitial() throws Exception {
         Path path = Paths.get("src/test/resources/samples/useHeader_noSchema_extraCols.csv");
         Map<String, String> attributes = new HashMap<>();
-        attributes.put("wh_txt_use_header", "1");
+        attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "|");
         attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
         attributes.put("wh_file_id", UUID.randomUUID().toString());
@@ -1847,7 +1847,7 @@ public class TestRecordReader {
     public void testProcessor_useHeader_noSchema_extraColsLater() throws Exception {
         Path path = Paths.get("src/test/resources/samples/useHeader_noSchema_extraColsLater.csv");
         Map<String, String> attributes = new HashMap<>();
-        attributes.put("wh_txt_use_header", "1");
+        attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "|");
         attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
         attributes.put("wh_file_id", UUID.randomUUID().toString());
@@ -1863,7 +1863,7 @@ public class TestRecordReader {
     public void testProcessor_useHeader_noSchema_skipLines() throws Exception {
         Path path = Paths.get("src/test/resources/samples/useHeader_noSchema_skipLines.csv");
         Map<String, String> attributes = new HashMap<>();
-        attributes.put("wh_txt_use_header", "1");
+        attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "|");
         attributes.put("wh_txt_skip_lines", "2");
         attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
@@ -1937,7 +1937,7 @@ public class TestRecordReader {
     public void testProcessor_useHeader_noSchema_skipLines_extraColsInitial() throws Exception {
         Path path = Paths.get("src/test/resources/samples/useHeader_noSchema_skipLines_extraCols.csv");
         Map<String, String> attributes = new HashMap<>();
-        attributes.put("wh_txt_use_header", "1");
+        attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "|");
         attributes.put("wh_txt_skip_lines", "2");
         attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
@@ -1954,7 +1954,7 @@ public class TestRecordReader {
     public void testProcessor_useHeader_noSchema_skipLines_extraColsLater() throws Exception {
         Path path = Paths.get("src/test/resources/samples/useHeader_noSchema_skipLines_extraColsLater.csv");
         Map<String, String> attributes = new HashMap<>();
-        attributes.put("wh_txt_use_header", "1");
+        attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "|");
         attributes.put("wh_txt_skip_lines", "2");
         attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
@@ -1971,7 +1971,7 @@ public class TestRecordReader {
     public void testProcessor_useHeader_noSchema_skipLines_withQuotesandEscape() throws Exception {
         Path path = Paths.get("src/test/resources/samples/skipLines_withHeader_withQuotes_withEscape.csv");
         Map<String, String> attributes = new HashMap<>();
-        attributes.put("wh_txt_use_header", "1");
+        attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "|");
         attributes.put("wh_txt_skip_lines", "2");
         attributes.put("wh_txt_quote", "\"");
@@ -2047,7 +2047,7 @@ public class TestRecordReader {
     public void testProcessor_useHeader_noSchema_withQuotesandEscape() throws Exception {
         Path path = Paths.get("src/test/resources/samples/withHeader_withQuotes_withEscape.csv");
         Map<String, String> attributes = new HashMap<>();
-        attributes.put("wh_txt_use_header", "1");
+        attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "|");
         attributes.put("wh_txt_quote", "\"");
         attributes.put("wh_txt_escape", "\\");
@@ -2122,7 +2122,7 @@ public class TestRecordReader {
     public void testProcessor_useHeader_useSchema() throws Exception {
         Path path = Paths.get("src/test/resources/samples/useHeader_useSchema.csv");
         Map<String, String> attributes = new HashMap<>();
-        attributes.put("wh_txt_use_header", "1");
+        attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "|");
         attributes.put("wh_txt_schema", "column_1,column_2,column_3");
         attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
@@ -2196,7 +2196,7 @@ public class TestRecordReader {
     public void testProcessor_useHeader_useSchema_extraColsInitial() throws Exception {
         Path path = Paths.get("src/test/resources/samples/useHeader_useSchema_extraCols.csv");
         Map<String, String> attributes = new HashMap<>();
-        attributes.put("wh_txt_use_header", "1");
+        attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_schema", "column_1,column_2,column_3,column_4");
         attributes.put("wh_txt_delim", "|");
         attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
@@ -2213,7 +2213,7 @@ public class TestRecordReader {
     public void testProcessor_useHeader_useSchema_extraColsLater() throws Exception {
         Path path = Paths.get("src/test/resources/samples/useHeader_useSchema_extraColsLater.csv");
         Map<String, String> attributes = new HashMap<>();
-        attributes.put("wh_txt_use_header", "1");
+        attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_schema", "column_1,column_2,column_3");
         attributes.put("wh_txt_delim", "|");
         attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
@@ -2230,7 +2230,7 @@ public class TestRecordReader {
     public void testProcessor_useHeader_useSchema_headerHasDiffCol() throws Exception {
         Path path = Paths.get("src/test/resources/samples/useHeader_useSchema_diffCol.csv");
         Map<String, String> attributes = new HashMap<>();
-        attributes.put("wh_txt_use_header", "1");
+        attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "|");
         attributes.put("wh_txt_schema", "column_1,column_2,column_3");
         attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
@@ -2247,7 +2247,7 @@ public class TestRecordReader {
     public void testProcessor_useHeader_useSchema_schemaHasLessColumns() throws Exception {
         Path path = Paths.get("src/test/resources/samples/useHeader_useSchema.csv");
         Map<String, String> attributes = new HashMap<>();
-        attributes.put("wh_txt_use_header", "1");
+        attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "|");
         attributes.put("wh_txt_schema", "column_1,column_2");
         attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
@@ -2264,7 +2264,7 @@ public class TestRecordReader {
     public void testProcessor_useHeader_useSchema_schemaHasMoreColumns() throws Exception {
         Path path = Paths.get("src/test/resources/samples/useHeader_useSchema.csv");
         Map<String, String> attributes = new HashMap<>();
-        attributes.put("wh_txt_use_header", "1");
+        attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "|");
         attributes.put("wh_txt_schema", "column_1,column_2,column_3,column_4");
         attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
@@ -2346,7 +2346,7 @@ public class TestRecordReader {
     public void testProcessor_useHeader_useSchema_skipLines() throws Exception {
         Path path = Paths.get("src/test/resources/samples/useHeader_useSchema_skipLines.csv");
         Map<String, String> attributes = new HashMap<>();
-        attributes.put("wh_txt_use_header", "1");
+        attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "|");
         attributes.put("wh_txt_skip_lines", "2");
         attributes.put("wh_txt_schema", "column_1,column_2,column_3");
@@ -2421,7 +2421,7 @@ public class TestRecordReader {
     public void testProcessor_useHeader_useSchema_skipLines_extraColsInitial() throws Exception {
         Path path = Paths.get("src/test/resources/samples/useHeader_useSchema_skipLines_extraCols.csv");
         Map<String, String> attributes = new HashMap<>();
-        attributes.put("wh_txt_use_header", "1");
+        attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_schema", "column_1,column_2,column_3,column_4");
         attributes.put("wh_txt_delim", "|");
         attributes.put("wh_txt_skip_lines", "2");
@@ -2439,7 +2439,7 @@ public class TestRecordReader {
     public void testProcessor_useHeader_useSchema_skipLines_extraColsLater() throws Exception {
         Path path = Paths.get("src/test/resources/samples/useHeader_useSchema_skipLines_extraColsLater.csv");
         Map<String, String> attributes = new HashMap<>();
-        attributes.put("wh_txt_use_header", "1");
+        attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_schema", "column_1,column_2,column_3");
         attributes.put("wh_txt_delim", "|");
         attributes.put("wh_txt_skip_lines", "2");
@@ -2457,7 +2457,7 @@ public class TestRecordReader {
     public void testProcessor_useHeader_useSchema_skipLines_headerHasDiffCol() throws Exception {
         Path path = Paths.get("src/test/resources/samples/useHeader_useSchema_skipLines_diffCol.csv");
         Map<String, String> attributes = new HashMap<>();
-        attributes.put("wh_txt_use_header", "1");
+        attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "|");
         attributes.put("wh_txt_skip_lines", "2");
         attributes.put("wh_txt_schema", "column_1,column_2,column_3");
@@ -2475,7 +2475,7 @@ public class TestRecordReader {
     public void testProcessor_useHeader_useSchema_skipLines_schemaHasLessColumns() throws Exception {
         Path path = Paths.get("src/test/resources/samples/useHeader_useSchema_skipLines.csv");
         Map<String, String> attributes = new HashMap<>();
-        attributes.put("wh_txt_use_header", "1");
+        attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "|");
         attributes.put("wh_txt_skip_lines", "2");
         attributes.put("wh_txt_schema", "column_1,column_2");
@@ -2493,7 +2493,7 @@ public class TestRecordReader {
     public void testProcessor_useHeader_useSchema_skipLines_schemaHasMoreColumns() throws Exception {
         Path path = Paths.get("src/test/resources/samples/useHeader_useSchema_skipLines.csv");
         Map<String, String> attributes = new HashMap<>();
-        attributes.put("wh_txt_use_header", "1");
+        attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "|");
         attributes.put("wh_txt_skip_lines", "2");
         attributes.put("wh_txt_schema", "column_1,column_2,column_3,column_4");
@@ -2576,7 +2576,7 @@ public class TestRecordReader {
     public void testProcessor_useHeader_useSchema_skipLines_withQuotesandEscape() throws Exception {
         Path path = Paths.get("src/test/resources/samples/skipLines_withHeader_withQuotes_withEscape.csv");
         Map<String, String> attributes = new HashMap<>();
-        attributes.put("wh_txt_use_header", "1");
+        attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_schema", "column_1,column_2,column_3");
         attributes.put("wh_txt_delim", "|");
         attributes.put("wh_txt_skip_lines", "2");
@@ -2653,7 +2653,7 @@ public class TestRecordReader {
     public void testProcessor_useHeader_useSchema_withQuotesandEscape() throws Exception {
         Path path = Paths.get("src/test/resources/samples/withHeader_withQuotes_withEscape.csv");
         Map<String, String> attributes = new HashMap<>();
-        attributes.put("wh_txt_use_header", "1");
+        attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_schema", "column_1,column_2,column_3");
         attributes.put("wh_txt_delim", "|");
         attributes.put("wh_txt_quote", "\"");
