@@ -2125,7 +2125,8 @@ public class TestRecordReader {
         attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "|");
         attributes.put("wh_txt_schema", "column_1,column_2,column_3");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
+//        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();

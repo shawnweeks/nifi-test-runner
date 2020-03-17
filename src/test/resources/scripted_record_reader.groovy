@@ -18,6 +18,9 @@ import org.apache.nifi.serialization.record.RecordField
 import org.apache.nifi.serialization.record.RecordFieldType
 import org.apache.nifi.serialization.record.RecordSchema
 import java.util.LinkedHashMap
+import java.sql.Timestamp
+import java.text.SimpleDateFormat
+//import java.util.Date
 
 class CSVRecordReader implements RecordReader {
     private Map<String, String> variables
@@ -36,6 +39,7 @@ class CSVRecordReader implements RecordReader {
     private List<String> headerNames
     private boolean hasSchema
     private boolean useHeaders 
+    private Timestamp fileDateTimestamp
     
     public static enum CsvAttribute {
         SCHEMA("wh_txt_schema"),
@@ -71,6 +75,8 @@ class CSVRecordReader implements RecordReader {
         this.inputStream = inputStream
         this.inputLength = inputLength
         this.logger = logger
+        
+        this.fileDateTimestamp = createTimestamp(variables.get(CsvAttribute.FILE_DATE.getAttribute()))
 
         final String schemaAttribute = variables.get(CsvAttribute.SCHEMA.getAttribute())
         if (null != schemaAttribute && !schemaAttribute.trim().isEmpty()) {
@@ -236,7 +242,7 @@ class CSVRecordReader implements RecordReader {
         ++rowCounter
         final Map<String, Object> recordMap = new HashMap<>()
         recordMap.put("row_data", record)
-        recordMap.put("wh_file_date",variables.get(CsvAttribute.FILE_DATE.getAttribute()))
+        recordMap.put("wh_file_date", this.fileDateTimestamp)
         recordMap.put("wh_file_id",variables.get(CsvAttribute.FILE_ID.getAttribute()))
         recordMap.put("wh_row_id",rowCounter)
         final MapRecord mapRecord = new MapRecord(schema,recordMap)
@@ -273,7 +279,7 @@ class CSVRecordReader implements RecordReader {
         for (int i = 0; i < record.length; i++) {
             recordMap.put(headerNames.get(i).trim().toLowerCase(), record[i])
         }
-        recordMap.put("wh_file_date",variables.get(CsvAttribute.FILE_DATE.getAttribute()))
+        recordMap.put("wh_file_date", this.fileDateTimestamp)
         recordMap.put("wh_file_id",variables.get(CsvAttribute.FILE_ID.getAttribute()))
         recordMap.put("wh_row_id",rowCounter)
         final MapRecord mapRecord = new MapRecord(schema,recordMap)
@@ -302,15 +308,22 @@ class CSVRecordReader implements RecordReader {
                 throw new MalformedRecordException(message)
             }
             final Map<String, Object> schemaCasedMap = convertKeysToSameCase(record, this.schema)
-            final Map<String, String> recordMap = new LinkedHashMap<>(schemaCasedMap)
-                       
-            recordMap.put("wh_file_date",variables.get(CsvAttribute.FILE_DATE.getAttribute()))
+            final Map<String, Object> recordMap = new LinkedHashMap<>(schemaCasedMap)
+               
+            recordMap.put("wh_file_date", this.fileDateTimestamp)
             recordMap.put("wh_file_id",variables.get(CsvAttribute.FILE_ID.getAttribute()))
             recordMap.put("wh_row_id",rowCounter)
             final MapRecord mapRecord = new MapRecord(schema,recordMap)
             return mapRecord
         }
         return null
+    }
+    
+    Timestamp createTimestamp(final String timestampString) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
+        Date date = dateFormat.parse(timestampString)
+        Timestamp timestamp = new Timestamp(date.getTime())
+        return timestamp
     }
     
     Map<String, Object> convertKeysToSameCase(final Map<String, Object> map, final RecordSchema recordSchema) {
@@ -384,7 +397,7 @@ class CSVRecordReader implements RecordReader {
     
     private List<RecordField> getMetaFields() {
         final List<RecordField> fields = new ArrayList<>()
-        fields.add(new RecordField("wh_file_date",RecordFieldType.LONG.dataType))
+        fields.add(new RecordField("wh_file_date",RecordFieldType.TIMESTAMP.dataType))
         fields.add(new RecordField("wh_file_id",RecordFieldType.STRING.dataType))
         fields.add(new RecordField("wh_row_id",RecordFieldType.LONG.dataType))
         return fields
