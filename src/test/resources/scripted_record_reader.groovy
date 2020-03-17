@@ -271,7 +271,7 @@ class CSVRecordReader implements RecordReader {
         final Map<String, Object> recordMap = new HashMap<>()
         
         for (int i = 0; i < record.length; i++) {
-            recordMap.put(headerNames.get(i), record[i])
+            recordMap.put(headerNames.get(i).trim().toLowerCase(), record[i])
         }
         recordMap.put("wh_file_date",variables.get(CsvAttribute.FILE_DATE.getAttribute()))
         recordMap.put("wh_file_id",variables.get(CsvAttribute.FILE_ID.getAttribute()))
@@ -301,7 +301,8 @@ class CSVRecordReader implements RecordReader {
                 final String message = "Expected " + fieldCount + " fields but encountered " + record.size() + " on row " + rowCounter
                 throw new MalformedRecordException(message)
             }
-            final Map<String, String> recordMap = new LinkedHashMap<>(record)
+            final Map<String, Object> schemaCasedMap = convertKeysToSameCase(record, this.schema)
+            final Map<String, String> recordMap = new LinkedHashMap<>(schemaCasedMap)
                        
             recordMap.put("wh_file_date",variables.get(CsvAttribute.FILE_DATE.getAttribute()))
             recordMap.put("wh_file_id",variables.get(CsvAttribute.FILE_ID.getAttribute()))
@@ -310,6 +311,22 @@ class CSVRecordReader implements RecordReader {
             return mapRecord
         }
         return null
+    }
+    
+    Map<String, Object> convertKeysToSameCase(final Map<String, Object> map, final RecordSchema recordSchema) {
+        final Map<String, Object> newMap = new LinkedHashMap<>()
+        final List<String> schemaFields = recordSchema.getFieldNames()
+        final Map<String, String> schemaFieldMap = new HashMap<>()
+        for (String schemaField : schemaFields) {
+            schemaFieldMap.put(schemaField, schemaField)
+        }
+
+        final Set<Map.Entry<String, Object>> entrySet = map.entrySet()
+        for (Map.Entry<String, Object> entry : entrySet) {
+            newMap.put(schemaFieldMap.get(entry.getKey().trim().toLowerCase()), entry.getValue())
+        }
+
+        return newMap
     }
     
     @Override
@@ -352,7 +369,7 @@ class CSVRecordReader implements RecordReader {
     private RecordSchema getSchemaFromList(final List<String> schemaString){
         final List<RecordField> fields = new ArrayList<>()
         for(String field : schemaString){
-            fields.add(new RecordField(field, RecordFieldType.STRING.dataType,true))
+            fields.add(new RecordField(field.trim().toLowerCase(), RecordFieldType.STRING.dataType,true))
         }
         fields.addAll(getMetaFields())
         return new SimpleRecordSchema(fields)
@@ -369,7 +386,7 @@ class CSVRecordReader implements RecordReader {
         final List<RecordField> fields = new ArrayList<>()
         fields.add(new RecordField("wh_file_date",RecordFieldType.LONG.dataType))
         fields.add(new RecordField("wh_file_id",RecordFieldType.STRING.dataType))
-        fields.add(new RecordField("wh_row_id",RecordFieldType.TIMESTAMP.dataType))
+        fields.add(new RecordField("wh_row_id",RecordFieldType.LONG.dataType))
         return fields
     }
     
