@@ -72,7 +72,7 @@ public class TestRecordReader {
         Map<String, String> attributes = new HashMap<>();
         attributes.put("wh_txt_schema", "column_1,column_2,column_3");
         attributes.put("wh_txt_delim", "<=>");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -104,7 +104,7 @@ public class TestRecordReader {
         assertEquals("hello", record.get("column_1").asText());
         assertEquals("world", record.get("column_2").asText());
         assertEquals("now", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("1", record.get("wh_row_id").asText());
 
@@ -119,7 +119,7 @@ public class TestRecordReader {
         assertEquals("foo", record.get("column_1").asText());
         assertEquals("bar", record.get("column_2").asText());
         assertEquals("fizz", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("2", record.get("wh_row_id").asText());
 
@@ -134,7 +134,7 @@ public class TestRecordReader {
         assertEquals("fizz", record.get("column_1").asText());
         assertEquals("buzz", record.get("column_2").asText());
         assertEquals("bar", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("3", record.get("wh_row_id").asText());
     }
@@ -145,7 +145,7 @@ public class TestRecordReader {
         Map<String, String> attributes = new HashMap<>();
         attributes.put("wh_txt_schema", "column_1,column_2,column_3,column_4");
         attributes.put("wh_txt_delim", "<=>");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -161,7 +161,7 @@ public class TestRecordReader {
         Map<String, String> attributes = new HashMap<>();
         attributes.put("wh_txt_schema", "column_1,column_2,column_3");
         attributes.put("wh_txt_delim", "<=>");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -177,7 +177,7 @@ public class TestRecordReader {
         Map<String, String> attributes = new HashMap<>();
         attributes.put("wh_txt_delim", "<=>");
         attributes.put("wh_txt_schema", "column_1,column_2");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -193,7 +193,7 @@ public class TestRecordReader {
         Map<String, String> attributes = new HashMap<>();
         attributes.put("wh_txt_schema", "column_1,column_2,column_3,column_4");
         attributes.put("wh_txt_delim", "<=>");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -228,7 +228,7 @@ public class TestRecordReader {
         assertEquals("world", record.get("column_2").asText());
         assertEquals("now", record.get("column_3").asText());
         assertEquals("null", record.get("column_4").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("1", record.get("wh_row_id").asText());
 
@@ -243,7 +243,7 @@ public class TestRecordReader {
         assertEquals("foo", record.get("column_1").asText());
         assertEquals("bar", record.get("column_2").asText());
         assertEquals("fizz", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("2", record.get("wh_row_id").asText());
 
@@ -258,7 +258,7 @@ public class TestRecordReader {
         assertEquals("fizz", record.get("column_1").asText());
         assertEquals("buzz", record.get("column_2").asText());
         assertEquals("bar", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("3", record.get("wh_row_id").asText());
     }
@@ -270,7 +270,7 @@ public class TestRecordReader {
         attributes.put("wh_txt_schema", "column_1,column_2,column_3");
         attributes.put("wh_txt_delim", "<=>");
         attributes.put("wh_txt_skip_lines", "2");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -302,7 +302,7 @@ public class TestRecordReader {
         assertEquals("hello", record.get("column_1").asText());
         assertEquals("world", record.get("column_2").asText());
         assertEquals("now", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("1", record.get("wh_row_id").asText());
 
@@ -317,7 +317,7 @@ public class TestRecordReader {
         assertEquals("foo", record.get("column_1").asText());
         assertEquals("bar", record.get("column_2").asText());
         assertEquals("fizz", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("2", record.get("wh_row_id").asText());
 
@@ -332,7 +332,7 @@ public class TestRecordReader {
         assertEquals("fizz", record.get("column_1").asText());
         assertEquals("buzz", record.get("column_2").asText());
         assertEquals("bar", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("3", record.get("wh_row_id").asText());
     }
@@ -344,7 +344,7 @@ public class TestRecordReader {
         attributes.put("wh_txt_schema", "column_1,column_2,column_3,column_4");
         attributes.put("wh_txt_delim", "<=>");
         attributes.put("wh_txt_skip_lines", "2");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -361,7 +361,7 @@ public class TestRecordReader {
         attributes.put("wh_txt_schema", "column_1,column_2,column_3");
         attributes.put("wh_txt_delim", "<=>");
         attributes.put("wh_txt_skip_lines", "2");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -378,7 +378,7 @@ public class TestRecordReader {
         attributes.put("wh_txt_delim", "<=>");
         attributes.put("wh_txt_skip_lines", "2");
         attributes.put("wh_txt_schema", "column_1,column_2");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -395,7 +395,7 @@ public class TestRecordReader {
         attributes.put("wh_txt_schema", "column_1,column_2,column_3,column_4");
         attributes.put("wh_txt_delim", "<=>");
         attributes.put("wh_txt_skip_lines", "2");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -430,7 +430,7 @@ public class TestRecordReader {
         assertEquals("world", record.get("column_2").asText());
         assertEquals("now", record.get("column_3").asText());
         assertEquals("null", record.get("column_4").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("1", record.get("wh_row_id").asText());
 
@@ -445,7 +445,7 @@ public class TestRecordReader {
         assertEquals("foo", record.get("column_1").asText());
         assertEquals("bar", record.get("column_2").asText());
         assertEquals("fizz", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("2", record.get("wh_row_id").asText());
 
@@ -460,7 +460,7 @@ public class TestRecordReader {
         assertEquals("fizz", record.get("column_1").asText());
         assertEquals("buzz", record.get("column_2").asText());
         assertEquals("bar", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("3", record.get("wh_row_id").asText());
     }
@@ -471,7 +471,7 @@ public class TestRecordReader {
         Map<String, String> attributes = new HashMap<>();
         attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "<=>");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -503,7 +503,7 @@ public class TestRecordReader {
         assertEquals("hello", record.get("column_1").asText());
         assertEquals("world", record.get("column_2").asText());
         assertEquals("now", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("1", record.get("wh_row_id").asText());
 
@@ -518,7 +518,7 @@ public class TestRecordReader {
         assertEquals("foo", record.get("column_1").asText());
         assertEquals("bar", record.get("column_2").asText());
         assertEquals("fizz", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("2", record.get("wh_row_id").asText());
 
@@ -533,7 +533,7 @@ public class TestRecordReader {
         assertEquals("fizz", record.get("column_1").asText());
         assertEquals("buzz", record.get("column_2").asText());
         assertEquals("bar", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("3", record.get("wh_row_id").asText());
     }
@@ -544,7 +544,7 @@ public class TestRecordReader {
         Map<String, String> attributes = new HashMap<>();
         attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "<=>");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -560,7 +560,7 @@ public class TestRecordReader {
         Map<String, String> attributes = new HashMap<>();
         attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "<=>");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -577,7 +577,7 @@ public class TestRecordReader {
         attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "<=>");
         attributes.put("wh_txt_skip_lines", "2");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -609,7 +609,7 @@ public class TestRecordReader {
         assertEquals("hello", record.get("column_1").asText());
         assertEquals("world", record.get("column_2").asText());
         assertEquals("now", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("1", record.get("wh_row_id").asText());
 
@@ -624,7 +624,7 @@ public class TestRecordReader {
         assertEquals("foo", record.get("column_1").asText());
         assertEquals("bar", record.get("column_2").asText());
         assertEquals("fizz", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("2", record.get("wh_row_id").asText());
 
@@ -639,7 +639,7 @@ public class TestRecordReader {
         assertEquals("fizz", record.get("column_1").asText());
         assertEquals("buzz", record.get("column_2").asText());
         assertEquals("bar", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("3", record.get("wh_row_id").asText());
     }
@@ -651,7 +651,7 @@ public class TestRecordReader {
         attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "<=>");
         attributes.put("wh_txt_skip_lines", "2");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -668,7 +668,7 @@ public class TestRecordReader {
         attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "<=>");
         attributes.put("wh_txt_skip_lines", "2");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -685,7 +685,7 @@ public class TestRecordReader {
         attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "<=>");
         attributes.put("wh_txt_schema", "column_1,column_2,column_3");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -717,7 +717,7 @@ public class TestRecordReader {
         assertEquals("hello", record.get("column_1").asText());
         assertEquals("world", record.get("column_2").asText());
         assertEquals("now", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("1", record.get("wh_row_id").asText());
 
@@ -732,7 +732,7 @@ public class TestRecordReader {
         assertEquals("foo", record.get("column_1").asText());
         assertEquals("bar", record.get("column_2").asText());
         assertEquals("fizz", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("2", record.get("wh_row_id").asText());
 
@@ -747,7 +747,81 @@ public class TestRecordReader {
         assertEquals("fizz", record.get("column_1").asText());
         assertEquals("buzz", record.get("column_2").asText());
         assertEquals("bar", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
+        assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
+        assertEquals("3", record.get("wh_row_id").asText());
+    }
+
+    @Test
+    public void testProcessor_multiDelim_useHeader_useSchema__caseDifference() throws Exception {
+        Path path = Paths.get("src/test/resources/samples/multiDelimiter_useHeader_useSchema_caseDifference.csv");
+        Map<String, String> attributes = new HashMap<>();
+        attributes.put("wh_txt_use_header", "y");
+        attributes.put("wh_txt_delim", "<=>");
+        attributes.put("wh_txt_schema", "coLumn_1,coluMn_2,colUmn_3");
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
+        attributes.put("wh_file_id", UUID.randomUUID().toString());
+        runner.enqueue(path, attributes);
+        runner.run();
+
+        final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
+
+        assertEquals(1, result.size());
+        final Schema schema = getSchema(result.get(0));
+        final List<Schema.Field> fields = schema.getFields();
+        assertEquals(6, fields.size());
+        assertEquals("column_1", fields.get(0).name());
+        assertEquals("column_2", fields.get(1).name());
+        assertEquals("column_3", fields.get(2).name());
+        assertEquals("wh_file_date", fields.get(3).name());
+        assertEquals("wh_file_id", fields.get(4).name());
+        assertEquals("wh_row_id", fields.get(5).name());
+
+        final List<JsonNode> jsonList = getJson(result);
+        assertEquals(3, jsonList.size());
+
+        JsonNode record = jsonList.get(0);
+
+        assertTrue(record.has("column_1"));
+        assertTrue(record.has("column_2"));
+        assertTrue(record.has("column_3"));
+        assertTrue(record.has("wh_file_date"));
+        assertTrue(record.has("wh_file_id"));
+        assertTrue(record.has("wh_row_id"));
+        assertEquals("hello", record.get("column_1").asText());
+        assertEquals("world", record.get("column_2").asText());
+        assertEquals("now", record.get("column_3").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
+        assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
+        assertEquals("1", record.get("wh_row_id").asText());
+
+        record = jsonList.get(1);
+
+        assertTrue(record.has("column_1"));
+        assertTrue(record.has("column_2"));
+        assertTrue(record.has("column_3"));
+        assertTrue(record.has("wh_file_date"));
+        assertTrue(record.has("wh_file_id"));
+        assertTrue(record.has("wh_row_id"));
+        assertEquals("foo", record.get("column_1").asText());
+        assertEquals("bar", record.get("column_2").asText());
+        assertEquals("fizz", record.get("column_3").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
+        assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
+        assertEquals("2", record.get("wh_row_id").asText());
+
+        record = jsonList.get(2);
+
+        assertTrue(record.has("column_1"));
+        assertTrue(record.has("column_2"));
+        assertTrue(record.has("column_3"));
+        assertTrue(record.has("wh_file_date"));
+        assertTrue(record.has("wh_file_id"));
+        assertTrue(record.has("wh_row_id"));
+        assertEquals("fizz", record.get("column_1").asText());
+        assertEquals("buzz", record.get("column_2").asText());
+        assertEquals("bar", record.get("column_3").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("3", record.get("wh_row_id").asText());
     }
@@ -759,7 +833,7 @@ public class TestRecordReader {
         attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_schema", "column_1,column_2,column_3,column_4");
         attributes.put("wh_txt_delim", "<=>");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -776,7 +850,7 @@ public class TestRecordReader {
         attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_schema", "column_1,column_2,column_3");
         attributes.put("wh_txt_delim", "<=>");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -793,7 +867,7 @@ public class TestRecordReader {
         attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "<=>");
         attributes.put("wh_txt_schema", "column_1,column_2,column_3");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -810,7 +884,7 @@ public class TestRecordReader {
         attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "<=>");
         attributes.put("wh_txt_schema", "column_1,column_2");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -827,7 +901,7 @@ public class TestRecordReader {
         attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "<=>");
         attributes.put("wh_txt_schema", "column_1,column_2,column_3,column_4");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -863,7 +937,7 @@ public class TestRecordReader {
         assertEquals("world", record.get("column_2").asText());
         assertEquals("now", record.get("column_3").asText());
         assertEquals("null", record.get("column_4").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("1", record.get("wh_row_id").asText());
 
@@ -880,7 +954,7 @@ public class TestRecordReader {
         assertEquals("bar", record.get("column_2").asText());
         assertEquals("fizz", record.get("column_3").asText());
         assertEquals("null", record.get("column_4").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("2", record.get("wh_row_id").asText());
 
@@ -897,7 +971,7 @@ public class TestRecordReader {
         assertEquals("buzz", record.get("column_2").asText());
         assertEquals("bar", record.get("column_3").asText());
         assertEquals("null", record.get("column_4").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("3", record.get("wh_row_id").asText());
     }
@@ -910,7 +984,7 @@ public class TestRecordReader {
         attributes.put("wh_txt_delim", "<=>");
         attributes.put("wh_txt_skip_lines", "2");
         attributes.put("wh_txt_schema", "column_1,column_2,column_3");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -942,7 +1016,7 @@ public class TestRecordReader {
         assertEquals("hello", record.get("column_1").asText());
         assertEquals("world", record.get("column_2").asText());
         assertEquals("now", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("1", record.get("wh_row_id").asText());
 
@@ -957,7 +1031,7 @@ public class TestRecordReader {
         assertEquals("foo", record.get("column_1").asText());
         assertEquals("bar", record.get("column_2").asText());
         assertEquals("fizz", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("2", record.get("wh_row_id").asText());
 
@@ -972,7 +1046,7 @@ public class TestRecordReader {
         assertEquals("fizz", record.get("column_1").asText());
         assertEquals("buzz", record.get("column_2").asText());
         assertEquals("bar", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("3", record.get("wh_row_id").asText());
     }
@@ -985,7 +1059,7 @@ public class TestRecordReader {
         attributes.put("wh_txt_schema", "column_1,column_2,column_3,column_4");
         attributes.put("wh_txt_delim", "<=>");
         attributes.put("wh_txt_skip_lines", "2");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -1003,7 +1077,7 @@ public class TestRecordReader {
         attributes.put("wh_txt_schema", "column_1,column_2,column_3");
         attributes.put("wh_txt_delim", "<=>");
         attributes.put("wh_txt_skip_lines", "2");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -1021,7 +1095,7 @@ public class TestRecordReader {
         attributes.put("wh_txt_delim", "<=>");
         attributes.put("wh_txt_skip_lines", "2");
         attributes.put("wh_txt_schema", "column_1,column_2,column_3");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -1039,7 +1113,7 @@ public class TestRecordReader {
         attributes.put("wh_txt_delim", "<=>");
         attributes.put("wh_txt_skip_lines", "2");
         attributes.put("wh_txt_schema", "column_1,column_2");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -1057,7 +1131,7 @@ public class TestRecordReader {
         attributes.put("wh_txt_delim", "<=>");
         attributes.put("wh_txt_skip_lines", "2");
         attributes.put("wh_txt_schema", "column_1,column_2,column_3,column_4");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -1093,7 +1167,7 @@ public class TestRecordReader {
         assertEquals("world", record.get("column_2").asText());
         assertEquals("now", record.get("column_3").asText());
         assertEquals("null", record.get("column_4").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("1", record.get("wh_row_id").asText());
 
@@ -1110,7 +1184,7 @@ public class TestRecordReader {
         assertEquals("bar", record.get("column_2").asText());
         assertEquals("fizz", record.get("column_3").asText());
         assertEquals("null", record.get("column_4").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("2", record.get("wh_row_id").asText());
 
@@ -1127,7 +1201,7 @@ public class TestRecordReader {
         assertEquals("buzz", record.get("column_2").asText());
         assertEquals("bar", record.get("column_3").asText());
         assertEquals("null", record.get("column_4").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("3", record.get("wh_row_id").asText());
     }
@@ -1136,7 +1210,7 @@ public class TestRecordReader {
     public void testProcessor_noDelimiter() throws Exception {
         Path path = Paths.get("src/test/resources/samples/noHeader_useSchema.csv");
         Map<String, String> attributes = new HashMap<>();
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -1162,7 +1236,7 @@ public class TestRecordReader {
         assertTrue(record.has("wh_file_id"));
         assertTrue(record.has("wh_row_id"));
         assertEquals("hello|world|now", record.get("row_data").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("1", record.get("wh_row_id").asText());
 
@@ -1173,7 +1247,7 @@ public class TestRecordReader {
         assertTrue(record.has("wh_file_id"));
         assertTrue(record.has("wh_row_id"));
         assertEquals("foo|bar|fizz", record.get("row_data").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("2", record.get("wh_row_id").asText());
 
@@ -1184,7 +1258,7 @@ public class TestRecordReader {
         assertTrue(record.has("wh_file_id"));
         assertTrue(record.has("wh_row_id"));
         assertEquals("fizz|buzz|bar", record.get("row_data").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("3", record.get("wh_row_id").asText());
     }
@@ -1194,7 +1268,7 @@ public class TestRecordReader {
         Path path = Paths.get("src/test/resources/samples/noHeader_useSchema.csv");
         Map<String, String> attributes = new HashMap<>();
         attributes.put("wh_txt_delim", "|");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -1210,7 +1284,7 @@ public class TestRecordReader {
         Map<String, String> attributes = new HashMap<>();
         attributes.put("wh_txt_schema", "column_1,column_2,column_3");
         attributes.put("wh_txt_delim", "|");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -1242,7 +1316,7 @@ public class TestRecordReader {
         assertEquals("hello", record.get("column_1").asText());
         assertEquals("world", record.get("column_2").asText());
         assertEquals("now", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("1", record.get("wh_row_id").asText());
 
@@ -1257,7 +1331,7 @@ public class TestRecordReader {
         assertEquals("foo", record.get("column_1").asText());
         assertEquals("bar", record.get("column_2").asText());
         assertEquals("fizz", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("2", record.get("wh_row_id").asText());
 
@@ -1272,7 +1346,7 @@ public class TestRecordReader {
         assertEquals("fizz", record.get("column_1").asText());
         assertEquals("buzz", record.get("column_2").asText());
         assertEquals("bar", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("3", record.get("wh_row_id").asText());
     }
@@ -1283,7 +1357,7 @@ public class TestRecordReader {
         Map<String, String> attributes = new HashMap<>();
         attributes.put("wh_txt_delim", "|");
         attributes.put("wh_txt_schema", "column_1,column_2");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -1299,7 +1373,7 @@ public class TestRecordReader {
         Map<String, String> attributes = new HashMap<>();
         attributes.put("wh_txt_schema", "column_1,column_2,column_3,column_4");
         attributes.put("wh_txt_delim", "|");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -1334,7 +1408,7 @@ public class TestRecordReader {
         assertEquals("world", record.get("column_2").asText());
         assertEquals("now", record.get("column_3").asText());
         assertEquals("null", record.get("column_4").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("1", record.get("wh_row_id").asText());
 
@@ -1349,7 +1423,7 @@ public class TestRecordReader {
         assertEquals("foo", record.get("column_1").asText());
         assertEquals("bar", record.get("column_2").asText());
         assertEquals("fizz", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("2", record.get("wh_row_id").asText());
 
@@ -1364,7 +1438,7 @@ public class TestRecordReader {
         assertEquals("fizz", record.get("column_1").asText());
         assertEquals("buzz", record.get("column_2").asText());
         assertEquals("bar", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("3", record.get("wh_row_id").asText());
     }
@@ -1376,7 +1450,7 @@ public class TestRecordReader {
         attributes.put("wh_txt_schema", "column_1,column_2,column_3");
         attributes.put("wh_txt_delim", "|");
         attributes.put("wh_txt_skip_lines", "2");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -1408,7 +1482,7 @@ public class TestRecordReader {
         assertEquals("hello", record.get("column_1").asText());
         assertEquals("world", record.get("column_2").asText());
         assertEquals("now", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("1", record.get("wh_row_id").asText());
 
@@ -1423,7 +1497,7 @@ public class TestRecordReader {
         assertEquals("foo", record.get("column_1").asText());
         assertEquals("bar", record.get("column_2").asText());
         assertEquals("fizz", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("2", record.get("wh_row_id").asText());
 
@@ -1438,7 +1512,7 @@ public class TestRecordReader {
         assertEquals("fizz", record.get("column_1").asText());
         assertEquals("buzz", record.get("column_2").asText());
         assertEquals("bar", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("3", record.get("wh_row_id").asText());
     }
@@ -1450,7 +1524,7 @@ public class TestRecordReader {
         attributes.put("wh_txt_schema", "column_1,column_2,column_3,column_4");
         attributes.put("wh_txt_delim", "|");
         attributes.put("wh_txt_skip_lines", "2");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -1467,7 +1541,7 @@ public class TestRecordReader {
         attributes.put("wh_txt_schema", "column_1,column_2,column_3");
         attributes.put("wh_txt_delim", "|");
         attributes.put("wh_txt_skip_lines", "2");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -1484,7 +1558,7 @@ public class TestRecordReader {
         attributes.put("wh_txt_delim", "|");
         attributes.put("wh_txt_skip_lines", "2");
         attributes.put("wh_txt_schema", "column_1,column_2");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -1501,7 +1575,7 @@ public class TestRecordReader {
         attributes.put("wh_txt_schema", "column_1,column_2,column_3,column_4");
         attributes.put("wh_txt_delim", "|");
         attributes.put("wh_txt_skip_lines", "2");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -1536,7 +1610,7 @@ public class TestRecordReader {
         assertEquals("world", record.get("column_2").asText());
         assertEquals("now", record.get("column_3").asText());
         assertEquals("null", record.get("column_4").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("1", record.get("wh_row_id").asText());
 
@@ -1551,7 +1625,7 @@ public class TestRecordReader {
         assertEquals("foo", record.get("column_1").asText());
         assertEquals("bar", record.get("column_2").asText());
         assertEquals("fizz", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("2", record.get("wh_row_id").asText());
 
@@ -1566,7 +1640,7 @@ public class TestRecordReader {
         assertEquals("fizz", record.get("column_1").asText());
         assertEquals("buzz", record.get("column_2").asText());
         assertEquals("bar", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("3", record.get("wh_row_id").asText());
     }
@@ -1580,7 +1654,7 @@ public class TestRecordReader {
         attributes.put("wh_txt_skip_lines", "2");
         attributes.put("wh_txt_quote", "\"");
         attributes.put("wh_txt_escape", "\\");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -1612,7 +1686,7 @@ public class TestRecordReader {
         assertEquals("hello", record.get("column_1").asText());
         assertEquals("wo\"|rld", record.get("column_2").asText());
         assertEquals("now", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("1", record.get("wh_row_id").asText());
 
@@ -1627,7 +1701,7 @@ public class TestRecordReader {
         assertEquals("foo", record.get("column_1").asText());
         assertEquals("bar", record.get("column_2").asText());
         assertEquals("fizz", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("2", record.get("wh_row_id").asText());
 
@@ -1642,7 +1716,7 @@ public class TestRecordReader {
         assertEquals("fizz", record.get("column_1").asText());
         assertEquals("buzz", record.get("column_2").asText());
         assertEquals("bar", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("3", record.get("wh_row_id").asText());
     }
@@ -1655,7 +1729,7 @@ public class TestRecordReader {
         attributes.put("wh_txt_delim", "|");
         attributes.put("wh_txt_quote", "\"");
         attributes.put("wh_txt_escape", "\\");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -1687,7 +1761,7 @@ public class TestRecordReader {
         assertEquals("hello", record.get("column_1").asText());
         assertEquals("wo\"|rld", record.get("column_2").asText());
         assertEquals("now", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("1", record.get("wh_row_id").asText());
 
@@ -1702,7 +1776,7 @@ public class TestRecordReader {
         assertEquals("foo", record.get("column_1").asText());
         assertEquals("bar", record.get("column_2").asText());
         assertEquals("fizz", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("2", record.get("wh_row_id").asText());
 
@@ -1717,7 +1791,7 @@ public class TestRecordReader {
         assertEquals("fizz", record.get("column_1").asText());
         assertEquals("buzz", record.get("column_2").asText());
         assertEquals("bar", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("3", record.get("wh_row_id").asText());
     }
@@ -1728,7 +1802,7 @@ public class TestRecordReader {
         Map<String, String> attributes = new HashMap<>();
         attributes.put("wh_txt_schema", "column_1,column_2,column_3,column_4");
         attributes.put("wh_txt_delim", "|");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -1744,7 +1818,7 @@ public class TestRecordReader {
         Map<String, String> attributes = new HashMap<>();
         attributes.put("wh_txt_schema", "column_1,column_2,column_3");
         attributes.put("wh_txt_delim", "|");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -1760,7 +1834,7 @@ public class TestRecordReader {
         Map<String, String> attributes = new HashMap<>();
         attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "|");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -1792,7 +1866,7 @@ public class TestRecordReader {
         assertEquals("hello", record.get("column_1").asText());
         assertEquals("world", record.get("column_2").asText());
         assertEquals("now", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("1", record.get("wh_row_id").asText());
 
@@ -1807,7 +1881,7 @@ public class TestRecordReader {
         assertEquals("foo", record.get("column_1").asText());
         assertEquals("bar", record.get("column_2").asText());
         assertEquals("fizz", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("2", record.get("wh_row_id").asText());
 
@@ -1822,7 +1896,7 @@ public class TestRecordReader {
         assertEquals("fizz", record.get("column_1").asText());
         assertEquals("buzz", record.get("column_2").asText());
         assertEquals("bar", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("3", record.get("wh_row_id").asText());
     }
@@ -1833,7 +1907,7 @@ public class TestRecordReader {
         Map<String, String> attributes = new HashMap<>();
         attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "|");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -1849,7 +1923,7 @@ public class TestRecordReader {
         Map<String, String> attributes = new HashMap<>();
         attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "|");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -1866,7 +1940,7 @@ public class TestRecordReader {
         attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "|");
         attributes.put("wh_txt_skip_lines", "2");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -1898,7 +1972,7 @@ public class TestRecordReader {
         assertEquals("hello", record.get("column_1").asText());
         assertEquals("world", record.get("column_2").asText());
         assertEquals("now", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("1", record.get("wh_row_id").asText());
 
@@ -1913,7 +1987,7 @@ public class TestRecordReader {
         assertEquals("foo", record.get("column_1").asText());
         assertEquals("bar", record.get("column_2").asText());
         assertEquals("fizz", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("2", record.get("wh_row_id").asText());
 
@@ -1928,7 +2002,7 @@ public class TestRecordReader {
         assertEquals("fizz", record.get("column_1").asText());
         assertEquals("buzz", record.get("column_2").asText());
         assertEquals("bar", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("3", record.get("wh_row_id").asText());
     }
@@ -1940,7 +2014,7 @@ public class TestRecordReader {
         attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "|");
         attributes.put("wh_txt_skip_lines", "2");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -1957,7 +2031,7 @@ public class TestRecordReader {
         attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "|");
         attributes.put("wh_txt_skip_lines", "2");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -1976,7 +2050,7 @@ public class TestRecordReader {
         attributes.put("wh_txt_skip_lines", "2");
         attributes.put("wh_txt_quote", "\"");
         attributes.put("wh_txt_escape", "\\");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -2008,7 +2082,7 @@ public class TestRecordReader {
         assertEquals("hello", record.get("column_1").asText());
         assertEquals("wo\"|rld", record.get("column_2").asText());
         assertEquals("now", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("1", record.get("wh_row_id").asText());
 
@@ -2023,7 +2097,7 @@ public class TestRecordReader {
         assertEquals("foo", record.get("column_1").asText());
         assertEquals("bar", record.get("column_2").asText());
         assertEquals("fizz", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("2", record.get("wh_row_id").asText());
 
@@ -2038,7 +2112,7 @@ public class TestRecordReader {
         assertEquals("fizz", record.get("column_1").asText());
         assertEquals("buzz", record.get("column_2").asText());
         assertEquals("bar", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("3", record.get("wh_row_id").asText());
     }
@@ -2051,7 +2125,7 @@ public class TestRecordReader {
         attributes.put("wh_txt_delim", "|");
         attributes.put("wh_txt_quote", "\"");
         attributes.put("wh_txt_escape", "\\");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -2083,7 +2157,7 @@ public class TestRecordReader {
         assertEquals("hello", record.get("column_1").asText());
         assertEquals("wo\"|rld", record.get("column_2").asText());
         assertEquals("now", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("1", record.get("wh_row_id").asText());
 
@@ -2098,7 +2172,7 @@ public class TestRecordReader {
         assertEquals("foo", record.get("column_1").asText());
         assertEquals("bar", record.get("column_2").asText());
         assertEquals("fizz", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("2", record.get("wh_row_id").asText());
 
@@ -2113,7 +2187,7 @@ public class TestRecordReader {
         assertEquals("fizz", record.get("column_1").asText());
         assertEquals("buzz", record.get("column_2").asText());
         assertEquals("bar", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("3", record.get("wh_row_id").asText());
     }
@@ -2126,7 +2200,6 @@ public class TestRecordReader {
         attributes.put("wh_txt_delim", "|");
         attributes.put("wh_txt_schema", "column_1,column_2,column_3");
         attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
-//        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -2158,7 +2231,7 @@ public class TestRecordReader {
         assertEquals("hello", record.get("column_1").asText());
         assertEquals("world", record.get("column_2").asText());
         assertEquals("now", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("1", record.get("wh_row_id").asText());
 
@@ -2173,7 +2246,7 @@ public class TestRecordReader {
         assertEquals("foo", record.get("column_1").asText());
         assertEquals("bar", record.get("column_2").asText());
         assertEquals("fizz", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("2", record.get("wh_row_id").asText());
 
@@ -2188,9 +2261,85 @@ public class TestRecordReader {
         assertEquals("fizz", record.get("column_1").asText());
         assertEquals("buzz", record.get("column_2").asText());
         assertEquals("bar", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("3", record.get("wh_row_id").asText());
+    }
+
+    @Test
+    public void testProcessor_useHeader_useSchema_caseDifference() throws Exception {
+        Path path = Paths.get("src/test/resources/samples/useHeader_useSchema_caseDifference.csv");
+        Map<String, String> attributes = new HashMap<>();
+        attributes.put("wh_txt_use_header", "y");
+        attributes.put("wh_txt_delim", "|");
+        attributes.put("wh_txt_schema", "coLumn_1,coluMn_2,colUmn_3");
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
+        attributes.put("wh_file_id", UUID.randomUUID().toString());
+        runner.enqueue(path, attributes);
+        runner.run();
+
+        final List<MockFlowFile> result = runner.getFlowFilesForRelationship("success");
+
+        assertEquals(1, result.size());
+        final Schema schema = getSchema(result.get(0));
+        final List<Schema.Field> fields = schema.getFields();
+        assertEquals(6, fields.size());
+        assertEquals("column_1", fields.get(0).name());
+        assertEquals("column_2", fields.get(1).name());
+        assertEquals("column_3", fields.get(2).name());
+        assertEquals("wh_file_date", fields.get(3).name());
+        assertEquals("wh_file_id", fields.get(4).name());
+        assertEquals("wh_row_id", fields.get(5).name());
+
+        final List<JsonNode> jsonList = getJson(result);
+        assertEquals(3, jsonList.size());
+
+        JsonNode record = jsonList.get(0);
+
+        // We expect everything to end up lowercase.
+        assertTrue(record.has("column_1"));
+        assertTrue(record.has("column_2"));
+        assertTrue(record.has("column_3"));
+        assertTrue(record.has("wh_file_date"));
+        assertTrue(record.has("wh_file_id"));
+        assertTrue(record.has("wh_row_id"));
+        assertEquals("hello", record.get("column_1").asText());
+        assertEquals("world", record.get("column_2").asText());
+        assertEquals("now", record.get("column_3").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
+        assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
+        assertEquals("1", record.get("wh_row_id").asText());
+
+        record = jsonList.get(1);
+
+        assertTrue(record.has("column_1"));
+        assertTrue(record.has("column_2"));
+        assertTrue(record.has("column_3"));
+        assertTrue(record.has("wh_file_date"));
+        assertTrue(record.has("wh_file_id"));
+        assertTrue(record.has("wh_row_id"));
+        assertEquals("foo", record.get("column_1").asText());
+        assertEquals("bar", record.get("column_2").asText());
+        assertEquals("fizz", record.get("column_3").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
+        assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
+        assertEquals("2", record.get("wh_row_id").asText());
+
+        record = jsonList.get(2);
+
+        assertTrue(record.has("column_1"));
+        assertTrue(record.has("column_2"));
+        assertTrue(record.has("column_3"));
+        assertTrue(record.has("wh_file_date"));
+        assertTrue(record.has("wh_file_id"));
+        assertTrue(record.has("wh_row_id"));
+        assertEquals("fizz", record.get("column_1").asText());
+        assertEquals("buzz", record.get("column_2").asText());
+        assertEquals("bar", record.get("column_3").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
+        assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
+        assertEquals("3", record.get("wh_row_id").asText());
+
     }
 
     @Test
@@ -2200,7 +2349,7 @@ public class TestRecordReader {
         attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_schema", "column_1,column_2,column_3,column_4");
         attributes.put("wh_txt_delim", "|");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -2217,7 +2366,7 @@ public class TestRecordReader {
         attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_schema", "column_1,column_2,column_3");
         attributes.put("wh_txt_delim", "|");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -2234,7 +2383,7 @@ public class TestRecordReader {
         attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "|");
         attributes.put("wh_txt_schema", "column_1,column_2,column_3");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -2251,7 +2400,7 @@ public class TestRecordReader {
         attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "|");
         attributes.put("wh_txt_schema", "column_1,column_2");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -2268,7 +2417,7 @@ public class TestRecordReader {
         attributes.put("wh_txt_use_header", "y");
         attributes.put("wh_txt_delim", "|");
         attributes.put("wh_txt_schema", "column_1,column_2,column_3,column_4");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -2304,7 +2453,7 @@ public class TestRecordReader {
         assertEquals("world", record.get("column_2").asText());
         assertEquals("now", record.get("column_3").asText());
         assertEquals("null", record.get("column_4").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("1", record.get("wh_row_id").asText());
 
@@ -2321,7 +2470,7 @@ public class TestRecordReader {
         assertEquals("bar", record.get("column_2").asText());
         assertEquals("fizz", record.get("column_3").asText());
         assertEquals("null", record.get("column_4").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("2", record.get("wh_row_id").asText());
 
@@ -2338,7 +2487,7 @@ public class TestRecordReader {
         assertEquals("buzz", record.get("column_2").asText());
         assertEquals("bar", record.get("column_3").asText());
         assertEquals("null", record.get("column_4").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("3", record.get("wh_row_id").asText());
     }
@@ -2351,7 +2500,7 @@ public class TestRecordReader {
         attributes.put("wh_txt_delim", "|");
         attributes.put("wh_txt_skip_lines", "2");
         attributes.put("wh_txt_schema", "column_1,column_2,column_3");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -2383,7 +2532,7 @@ public class TestRecordReader {
         assertEquals("hello", record.get("column_1").asText());
         assertEquals("world", record.get("column_2").asText());
         assertEquals("now", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("1", record.get("wh_row_id").asText());
 
@@ -2398,7 +2547,7 @@ public class TestRecordReader {
         assertEquals("foo", record.get("column_1").asText());
         assertEquals("bar", record.get("column_2").asText());
         assertEquals("fizz", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("2", record.get("wh_row_id").asText());
 
@@ -2413,7 +2562,7 @@ public class TestRecordReader {
         assertEquals("fizz", record.get("column_1").asText());
         assertEquals("buzz", record.get("column_2").asText());
         assertEquals("bar", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("3", record.get("wh_row_id").asText());
     }
@@ -2426,7 +2575,7 @@ public class TestRecordReader {
         attributes.put("wh_txt_schema", "column_1,column_2,column_3,column_4");
         attributes.put("wh_txt_delim", "|");
         attributes.put("wh_txt_skip_lines", "2");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -2444,7 +2593,7 @@ public class TestRecordReader {
         attributes.put("wh_txt_schema", "column_1,column_2,column_3");
         attributes.put("wh_txt_delim", "|");
         attributes.put("wh_txt_skip_lines", "2");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -2462,7 +2611,7 @@ public class TestRecordReader {
         attributes.put("wh_txt_delim", "|");
         attributes.put("wh_txt_skip_lines", "2");
         attributes.put("wh_txt_schema", "column_1,column_2,column_3");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -2480,7 +2629,7 @@ public class TestRecordReader {
         attributes.put("wh_txt_delim", "|");
         attributes.put("wh_txt_skip_lines", "2");
         attributes.put("wh_txt_schema", "column_1,column_2");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -2498,7 +2647,7 @@ public class TestRecordReader {
         attributes.put("wh_txt_delim", "|");
         attributes.put("wh_txt_skip_lines", "2");
         attributes.put("wh_txt_schema", "column_1,column_2,column_3,column_4");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -2534,7 +2683,7 @@ public class TestRecordReader {
         assertEquals("world", record.get("column_2").asText());
         assertEquals("now", record.get("column_3").asText());
         assertEquals("null", record.get("column_4").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("1", record.get("wh_row_id").asText());
 
@@ -2551,7 +2700,7 @@ public class TestRecordReader {
         assertEquals("bar", record.get("column_2").asText());
         assertEquals("fizz", record.get("column_3").asText());
         assertEquals("null", record.get("column_4").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("2", record.get("wh_row_id").asText());
 
@@ -2568,7 +2717,7 @@ public class TestRecordReader {
         assertEquals("buzz", record.get("column_2").asText());
         assertEquals("bar", record.get("column_3").asText());
         assertEquals("null", record.get("column_4").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("3", record.get("wh_row_id").asText());
     }
@@ -2583,7 +2732,7 @@ public class TestRecordReader {
         attributes.put("wh_txt_skip_lines", "2");
         attributes.put("wh_txt_quote", "\"");
         attributes.put("wh_txt_escape", "\\");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -2615,7 +2764,7 @@ public class TestRecordReader {
         assertEquals("hello", record.get("column_1").asText());
         assertEquals("wo\"|rld", record.get("column_2").asText());
         assertEquals("now", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("1", record.get("wh_row_id").asText());
 
@@ -2630,7 +2779,7 @@ public class TestRecordReader {
         assertEquals("foo", record.get("column_1").asText());
         assertEquals("bar", record.get("column_2").asText());
         assertEquals("fizz", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("2", record.get("wh_row_id").asText());
 
@@ -2645,7 +2794,7 @@ public class TestRecordReader {
         assertEquals("fizz", record.get("column_1").asText());
         assertEquals("buzz", record.get("column_2").asText());
         assertEquals("bar", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("3", record.get("wh_row_id").asText());
     }
@@ -2659,7 +2808,7 @@ public class TestRecordReader {
         attributes.put("wh_txt_delim", "|");
         attributes.put("wh_txt_quote", "\"");
         attributes.put("wh_txt_escape", "\\");
-        attributes.put("wh_file_date", String.valueOf(System.currentTimeMillis()));
+        attributes.put("wh_file_date", "2020-03-12 10:20:10.100");
         attributes.put("wh_file_id", UUID.randomUUID().toString());
         runner.enqueue(path, attributes);
         runner.run();
@@ -2691,7 +2840,7 @@ public class TestRecordReader {
         assertEquals("hello", record.get("column_1").asText());
         assertEquals("wo\"|rld", record.get("column_2").asText());
         assertEquals("now", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("1", record.get("wh_row_id").asText());
 
@@ -2706,7 +2855,7 @@ public class TestRecordReader {
         assertEquals("foo", record.get("column_1").asText());
         assertEquals("bar", record.get("column_2").asText());
         assertEquals("fizz", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("2", record.get("wh_row_id").asText());
 
@@ -2721,7 +2870,7 @@ public class TestRecordReader {
         assertEquals("fizz", record.get("column_1").asText());
         assertEquals("buzz", record.get("column_2").asText());
         assertEquals("bar", record.get("column_3").asText());
-        assertEquals(attributes.get("wh_file_date"), record.get("wh_file_date").asText());
+        assertEquals(1584026410100l, record.get("wh_file_date").asLong());
         assertEquals(attributes.get("wh_file_id"), record.get("wh_file_id").asText());
         assertEquals("3", record.get("wh_row_id").asText());
     }

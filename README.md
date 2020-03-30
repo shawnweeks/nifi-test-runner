@@ -1,4 +1,6 @@
-# nifi-groovy-testing
+# nifi-csv-groovy-record-reader
+
+The script is located in "src/test/resources/scripted_record_reader.groovy"
 
 
 Please note, when I say "empty string", I'm including 0 length strings or strings with nothing but whitespace characters.

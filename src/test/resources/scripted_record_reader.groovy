@@ -20,7 +20,6 @@ import org.apache.nifi.serialization.record.RecordSchema
 import java.util.LinkedHashMap
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
-//import java.util.Date
 
 class CSVRecordReader implements RecordReader {
     private Map<String, String> variables
@@ -38,8 +37,9 @@ class CSVRecordReader implements RecordReader {
     private String delimiter
     private List<String> headerNames
     private boolean hasSchema
-    private boolean useHeaders 
+    private boolean useHeaders
     private Timestamp fileDateTimestamp
+    private String whFileId
     
     public static enum CsvAttribute {
         SCHEMA("wh_txt_schema"),
@@ -66,15 +66,13 @@ class CSVRecordReader implements RecordReader {
         final InputStream inputStream,
         final long inputLength,
         final ComponentLog logger) {
-        println "Printing Variables"
-        for(String var : variables){
-            println var
-        }
 
         this.variables = variables
         this.inputStream = inputStream
         this.inputLength = inputLength
         this.logger = logger
+        
+        this.whFileId = variables.get(CsvAttribute.FILE_ID.getAttribute())
         
         this.fileDateTimestamp = createTimestamp(variables.get(CsvAttribute.FILE_DATE.getAttribute()))
 
@@ -243,7 +241,7 @@ class CSVRecordReader implements RecordReader {
         final Map<String, Object> recordMap = new HashMap<>()
         recordMap.put("row_data", record)
         recordMap.put("wh_file_date", this.fileDateTimestamp)
-        recordMap.put("wh_file_id",variables.get(CsvAttribute.FILE_ID.getAttribute()))
+        recordMap.put("wh_file_id", this.whFileId)
         recordMap.put("wh_row_id",rowCounter)
         final MapRecord mapRecord = new MapRecord(schema,recordMap)
         return mapRecord
@@ -280,7 +278,7 @@ class CSVRecordReader implements RecordReader {
             recordMap.put(headerNames.get(i).trim().toLowerCase(), record[i])
         }
         recordMap.put("wh_file_date", this.fileDateTimestamp)
-        recordMap.put("wh_file_id",variables.get(CsvAttribute.FILE_ID.getAttribute()))
+        recordMap.put("wh_file_id", this.whFileId)
         recordMap.put("wh_row_id",rowCounter)
         final MapRecord mapRecord = new MapRecord(schema,recordMap)
         return mapRecord
@@ -307,11 +305,10 @@ class CSVRecordReader implements RecordReader {
                 final String message = "Expected " + fieldCount + " fields but encountered " + record.size() + " on row " + rowCounter
                 throw new MalformedRecordException(message)
             }
-            final Map<String, Object> schemaCasedMap = convertKeysToSameCase(record, this.schema)
-            final Map<String, Object> recordMap = new LinkedHashMap<>(schemaCasedMap)
+            final Map<String, Object> recordMap = convertKeysToSameCase(record, this.schema)
                
             recordMap.put("wh_file_date", this.fileDateTimestamp)
-            recordMap.put("wh_file_id",variables.get(CsvAttribute.FILE_ID.getAttribute()))
+            recordMap.put("wh_file_id", this.whFileId)
             recordMap.put("wh_row_id",rowCounter)
             final MapRecord mapRecord = new MapRecord(schema,recordMap)
             return mapRecord
